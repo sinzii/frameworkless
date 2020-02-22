@@ -4,6 +4,12 @@ const Handlebars = require('handlebars');
 
 const templateSuffix = '.hbs';
 
+/**
+ * Read the folder and looping though all files inside. Yes, recursively!
+ *
+ * @param folder
+ * @param callback
+ */
 function readTemplatesSync(folder, callback) {
     const files = fs.readdirSync(path.join(__dirname, folder));
 
@@ -20,6 +26,11 @@ function readTemplatesSync(folder, callback) {
     }
 }
 
+/**
+ * Register partial templates
+ *
+ * @type {string}
+ */
 const partialsFolder = '../templates/partials';
 function registerPartialTemplates() {
     readTemplatesSync(partialsFolder, (filePath, content) => {
@@ -31,6 +42,11 @@ function registerPartialTemplates() {
     });
 }
 
+/**
+ * Register page templates and caching them in a map for further using.
+ *
+ * @type {{}}
+ */
 const templateHolder = {};
 const templateFiles = {};
 const templateFolder = '../templates/pages';
@@ -45,11 +61,20 @@ function registerTemplates() {
     });
 }
 
+/**
+ * Setup views
+ */
 exports.setup = function () {
     registerPartialTemplates();
     registerTemplates();
 };
 
+/**
+ * Get a specific template by name
+ *
+ * @param name
+ * @returns {Promise<unknown>}
+ */
 exports.getTemplate = function (name) {
     // TODO load compiled template for production
     // return templateHolder[name];

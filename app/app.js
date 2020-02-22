@@ -41,6 +41,8 @@ const app = async function (req, res) {
         return;
     }
 
+    // TODO: 500 error
+
     // TODO: 404 error
     res.statusCode = 404;
     res.setHeader('Content-Type', 'text/plain');
