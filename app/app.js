@@ -1,11 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 const mime = require('mime-types');
+const viewsEngine = require('./views_engine');
 
-const ROOT_FOLDER = __dirname;
+const ROOT_FOLDER = path.join(__dirname, '/..');
 
-const app = function (req, res) {
-    const { method, url } = req;
+viewsEngine.setup();
+
+const app = async function (req, res) {
+    const {method, url} = req;
     console.log(method, url);
 
     // TODO: serve static files
@@ -27,25 +30,21 @@ const app = function (req, res) {
         return;
     }
 
-
     // TODO: route to specific path
+    if (url === '/' || url === '') {
+        const index = await viewsEngine.getTemplate('index');
+
+        res.setHeader('Content-Type', 'text/html');
+
+        res.end(index({welcome: 'Hello World'}));
+
+        return;
+    }
 
     // TODO: 404 error
-
-
-    res.setHeader('Content-Type', 'text/html');
-
-    res.end(`
-    <!doctype html>
-    <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="public/css/style.css"/>
-    </head>
-    <body>
-        <h1>Hello World Haha</h1>
-    </body>
-    </html>
-    `);
-}
+    res.statusCode = 404;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Page not found!');
+};
 
 module.exports = app;

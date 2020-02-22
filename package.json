@@ -9,6 +9,7 @@
   "author": "@sinzii",
   "license": "ISC",
   "dependencies": {
+    "handlebars": "^4.7.3",
     "mime-types": "^2.1.26",
     "progress": "^2.0.3"
   },
