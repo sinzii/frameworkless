@@ -1,11 +1,6 @@
-const viewsEngine = require('./views_engine');
 const errorUtils = require('./utils/error');
 const staticFileHandler = require('./static_file_handler');
-const loader = require('./loader');
 const router = require('./router');
-
-viewsEngine.setup();
-loader.loadController('./controller');
 
 const staticDirs = ['public'];
 
