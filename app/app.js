@@ -1,31 +1,18 @@
-const fs = require('fs');
-const path = require('path');
-const mime = require('mime-types');
 const viewsEngine = require('./views_engine');
 const errorUtils = require('./utils/error');
-
-const ROOT_FOLDER = path.join(__dirname, '/..');
+const staticFileHandler = require('./static_file_handler');
 
 viewsEngine.setup();
+
+const staticDirs = ['public'];
 
 const requestHandler = async function (req, res) {
     const {method, url} = req;
     console.log(method, url);
 
-    // TODO: serve static files
-    const publicFolder = 'public';
-    if (url.startsWith(`/${publicFolder}`)) {
-        const targetFile = path.join(ROOT_FOLDER, url);
-        fs.readFile(targetFile, function (err, data) {
-            if (err) {
-                errorUtils.send404Error(res, "File's not found");
-                return;
-            }
-
-            res.setHeader('Content-Type', mime.contentType(path.extname(targetFile)));
-            res.end(data);
-        });
-
+    // Serve static files
+    const served = staticFileHandler(staticDirs, req, res);
+    if (served) {
         return;
     }
 
