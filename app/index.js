@@ -1,8 +1,13 @@
+// setup logger
+require('./config/logger');
+
 const http = require('http')
 const app = require('./app');
 const setupApplication = require('./setup');
+const logger = require('log4js').getLogger('app');
 
 const bootstrapping = async () => {
+    logger.debug("Bootstrapping the server");
     const server = http.createServer(app);
 
     const port = 3000;

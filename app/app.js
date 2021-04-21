@@ -1,12 +1,14 @@
 const errorUtils = require('./utils/error');
 const staticFileHandler = require('./static_file_handler');
 const router = require('./router');
+const logger = require('log4js').getLogger('app');
+const httpLogger = require('log4js').getLogger('http');
 
 const staticDirs = ['public'];
 
 const requestHandler = async function (req, res) {
     const {method, url} = req;
-    console.log(method, url);
+    httpLogger.debug(`${method} - ${url}`);
 
     // Serve static files
     const served = staticFileHandler(staticDirs, req, res);
@@ -27,7 +29,7 @@ const app = async (req, res) => {
     try {
         await requestHandler(req, res);
     } catch (e) {
-        console.log(e);
+        logger.error(e);
         await errorUtils.sendErrorCode(res, 500, e.message);
     }
 }
