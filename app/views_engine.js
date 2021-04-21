@@ -64,7 +64,7 @@ function registerTemplates() {
 /**
  * Setup views
  */
-exports.setup = function () {
+const setup = function () {
     registerPartialTemplates();
     registerTemplates();
 };
@@ -75,12 +75,17 @@ exports.setup = function () {
  * @param name
  * @returns {Promise<unknown>}
  */
-exports.getTemplate = function (name) {
+const getTemplate = function (name) {
     // TODO load compiled template for production
     // return templateHolder[name];
 
     // TODO for development
     return new Promise((resolve, reject) => {
+        const filePath = templateFiles[name];
+        if (!filePath) {
+            throw new Error('Template is not existed');
+        }
+
         fs.readFile(templateFiles[name], 'utf-8', (err, data) => {
             if (err) {
                 reject(err);
@@ -91,3 +96,18 @@ exports.getTemplate = function (name) {
         })
     });
 };
+
+const render = async function (res, name, data) {
+    const page = await getTemplate(name);
+
+    res.setHeader('Content-Type', 'text/html');
+
+    res.end(page(data));
+}
+
+
+module.exports = {
+    setup,
+    getTemplate,
+    render
+}

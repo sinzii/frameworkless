@@ -1,8 +1,11 @@
 const viewsEngine = require('./views_engine');
 const errorUtils = require('./utils/error');
 const staticFileHandler = require('./static_file_handler');
+const loader = require('./loader');
+const router = require('./router');
 
 viewsEngine.setup();
+loader.loadController('./controller');
 
 const staticDirs = ['public'];
 
@@ -16,19 +19,13 @@ const requestHandler = async function (req, res) {
         return;
     }
 
-    // TODO: route to specific path
-    if (url === '/' || url === '') {
-        const index = await viewsEngine.getTemplate('index');
-
-        res.setHeader('Content-Type', 'text/html');
-
-        res.end(index({welcome: 'Hello World'}));
-
-        return;
+    // detect route and serve
+    const route = router.getMatchedRoute(req);
+    if (route) {
+        await route.handler(req, res);
+    } else {
+        await errorUtils.send404Error(res, "Page's not found!");
     }
-
-    // TODO: 404 error
-    errorUtils.send404Error(res, "Page's not found!");
 };
 
 const app = async (req, res) => {
@@ -36,7 +33,7 @@ const app = async (req, res) => {
         await requestHandler(req, res);
     } catch (e) {
         console.log(e);
-        errorUtils.sendErrorCode(res, 500, e.message);
+        await errorUtils.sendErrorCode(res, 500, e.message);
     }
 }
 
