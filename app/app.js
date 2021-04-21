@@ -2,12 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const mime = require('mime-types');
 const viewsEngine = require('./views_engine');
+const requestUtils = require('./utils/request');
 
 const ROOT_FOLDER = path.join(__dirname, '/..');
 
 viewsEngine.setup();
 
-const app = async function (req, res) {
+const requestHandler = async function (req, res) {
     const {method, url} = req;
     console.log(method, url);
 
@@ -17,9 +18,7 @@ const app = async function (req, res) {
         const targetFile = path.join(ROOT_FOLDER, url);
         fs.readFile(targetFile, function (err, data) {
             if (err) {
-                res.statusCode = 404;
-                res.setHeader('Content-Type', 'text/plain');
-                res.end('File not found!');
+                requestUtils.send404Error(res, "File's not found");
                 return;
             }
 
@@ -41,12 +40,17 @@ const app = async function (req, res) {
         return;
     }
 
-    // TODO: 500 error
-
     // TODO: 404 error
-    res.statusCode = 404;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Page not found!');
+    requestUtils.send404Error(res, "Page's not found!");
 };
+
+const app = async (req, res) => {
+    try {
+        await requestHandler(req, res);
+    } catch (e) {
+        console.log(e);
+        requestUtils.sendErrorCode(res, 500, e.message);
+    }
+}
 
 module.exports = app;
