@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const mime = require('mime-types');
 const viewsEngine = require('./views_engine');
-const requestUtils = require('./utils/request');
+const errorUtils = require('./utils/error');
 
 const ROOT_FOLDER = path.join(__dirname, '/..');
 
@@ -18,7 +18,7 @@ const requestHandler = async function (req, res) {
         const targetFile = path.join(ROOT_FOLDER, url);
         fs.readFile(targetFile, function (err, data) {
             if (err) {
-                requestUtils.send404Error(res, "File's not found");
+                errorUtils.send404Error(res, "File's not found");
                 return;
             }
 
@@ -41,7 +41,7 @@ const requestHandler = async function (req, res) {
     }
 
     // TODO: 404 error
-    requestUtils.send404Error(res, "Page's not found!");
+    errorUtils.send404Error(res, "Page's not found!");
 };
 
 const app = async (req, res) => {
@@ -49,7 +49,7 @@ const app = async (req, res) => {
         await requestHandler(req, res);
     } catch (e) {
         console.log(e);
-        requestUtils.sendErrorCode(res, 500, e.message);
+        errorUtils.sendErrorCode(res, 500, e.message);
     }
 }
 
