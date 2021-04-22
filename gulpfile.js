@@ -13,7 +13,7 @@ gulp.task('reload-browser', (done) => {
     done();
 });
 
-gulp.task('serve', (done) => {
+gulp.task('serve', gulp.series('scss', (done) => {
     browserSync.init({
         proxy: 'localhost:3000'
     });
@@ -21,4 +21,4 @@ gulp.task('serve', (done) => {
     gulp.watch(['./scss/**/*.scss'], gulp.series(['scss', 'reload-browser']));
 
     done();
-});
+}));

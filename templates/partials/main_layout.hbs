@@ -1,10 +1,31 @@
 <!doctype html>
-<html>
-    <head>
-        <title>Learn NodeJS</title>
-        <link rel="stylesheet" type="text/css" href="public/css/style.css"/>
-    </head>
-    <body>
-        {{> @partial-block }}
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="public/css/style.css"/>
+    <title>Frameworkless</title>
+</head>
+<body>
+    <div class="container">
+        <header class="p-3 mb-3 border-bottom">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 p-color text-decoration-none fw-bold font-monospace">
+                    Frameworkless
+                </a>
+
+                <ul class="nav col-12 col-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="/" class="nav-link px-4 link-dark">Home</a></li>
+                    <li><a href="/showcases" class="nav-link px-4 link-dark">Showcases</a></li>
+                    <li><a href="/about" class="nav-link px-4 link-dark">About</a></li>
+                </ul>
+            </div>
+        </header>
+        <main class="main-content">
+            {{> @partial-block }}
+        </main>
+    </div>
+</body>
 </html>
