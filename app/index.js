@@ -5,15 +5,16 @@ const http = require('http')
 const app = require('./app');
 const setupApplication = require('./setup');
 const logger = require('log4js').getLogger('app');
+const { bootstrapWebsocketServer } = require('./ws');
 
 const bootstrapping = async () => {
     logger.debug("Bootstrapping the server");
-    const server = http.createServer(app);
+    const httpServer = http.createServer(app);
+    bootstrapWebsocketServer(httpServer);
 
     const port = 3000;
-
-    server.listen(port, function() {
-        console.log(`Server started at http://localhost:${port}`);
+    httpServer.listen(port, function() {
+        logger.info(`Server started at http://localhost:${port}`);
     });
 }
 
