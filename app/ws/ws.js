@@ -67,13 +67,13 @@ class WebSocket {
             logger.debug(`Client ${client.id} tries to subscribe to topic`, topicName);
             const topic = this.getTopic(topicName);
             if (!topic) {
-                client.publish('subscribe', `Topic ${topicName} is not existed!`);
+                client.publish('subscribe', false, `Topic ${topicName} is not existed!`);
                 logger.error(`Topic ${topicName} is not existed for client`, client.id);
                 return;
             }
 
             topic.subscribe(client);
-            client.publish('subscribe', `Topic ${topicName} has been successfully subscribed!`);
+            client.publish('subscribe', true, `Topic ${topicName} has been successfully subscribed!`);
 
             if (topic instanceof NumberOnlineClientsTopic) {
                 client.publish(topic.name, await topic.getCurrentOnlineClients());
@@ -88,13 +88,13 @@ class WebSocket {
             logger.debug(`Client ${client.id} tries to unsubscribe to topic`, topicName);
             const topic = this.getTopic(topicName);
             if (!topic) {
-                client.publish('unsubscribe', `Topic ${topicName} is not existed!`);
+                client.publish('unsubscribe', false, `Topic ${topicName} is not existed!`);
                 logger.error(`Topic ${topicName} is not existed for client`, client.id);
                 return;
             }
 
             topic.unsubscribe(client);
-            client.publish('unsubscribe', `Topic ${topicName} has been successfully unsubscribed!`);
+            client.publish('unsubscribe', true, `Topic ${topicName} has been successfully unsubscribed!`);
             logger.debug(`Client ${client.id} has been successfully unsubscribed to topic`, topicName);
         });
     }
@@ -111,15 +111,19 @@ class WebSocket {
     }
 
     getTopic(name) {
-        return this.topicByName.get(`topic/${name}`);
+        if (!name.startsWith('topic/')) {
+            name = `topic/${name}`;
+        }
+
+        return this.topicByName.get(name);
     }
 
     hasTopic(name) {
         return !!this.getTopic(name);
     }
 
-    publish(event, data) {
-        this.server.emit(event, data);
+    publish(event, ...data) {
+        this.server.emit(event, ...data);
     }
 }
 

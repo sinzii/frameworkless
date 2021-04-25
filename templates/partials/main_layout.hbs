@@ -27,5 +27,30 @@
             {{> @partial-block }}
         </main>
     </div>
+    <footer class="main-footer py-3 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">Online users: <span class="online-users-counter fw-bold">&nbsp;</span></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"
+            integrity="sha512-eVL5Lb9al9FzgR63gDs1MxcDS2wFu3loYAgjIH0+Hg38tCS8Ag62dwKyH+wzDb+QauDpEZjXbMn11blw8cbTJQ=="
+            crossorigin="anonymous"></script>
+    <script>
+        const onlineUsersCounter = document.querySelector('span.online-users-counter');
+        const updateUserCounter = function (number) {
+            onlineUsersCounter.innerHTML = number;
+        }
+
+        const socket = io();
+
+        socket.on('subscribe', (success, msg) => {
+            if (success) {
+                socket.on('topic/NUMBER_ONLINE_CLIENTS', (msg) => {
+                    updateUserCounter(msg);
+                });
+            }
+        }).emit('subscribe', 'NUMBER_ONLINE_CLIENTS');
+    </script>
 </body>
 </html>

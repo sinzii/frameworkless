@@ -20,8 +20,8 @@ class Topic {
         client.socket.leave(this.name);
     }
 
-    publish(data) {
-        this.server.to(this.name).emit(this.name, data);
+    publish(...data) {
+        this.server.to(this.name).emit(this.name, ...data);
     }
 }
 

@@ -4,8 +4,8 @@ class Client {
         this.id = socket.id;
     }
 
-    publish(event, data) {
-        this.socket.emit(event, data);
+    publish(event, ...data) {
+        this.socket.emit(event, ...data);
     }
 
     subscribe(event, callback) {
