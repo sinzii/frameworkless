@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  mongo:
+    image: mongo:4.4.4
+    ports:
+      - 27017:27017
+    restart: always
+  fwl:
+    image: node:12-alpine
+    command: tail -f /dev/null
+    ports:
+      - 3000:3000  # application port
+      - 9229:9229  # debug port
+    working_dir: /app
+    volumes:
+      - ./:/app
