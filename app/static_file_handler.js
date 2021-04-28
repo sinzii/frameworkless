@@ -23,9 +23,9 @@ const staticFileHandler = (staticDirs, req, res) => {
     }
 
     const targetFile = path.join(ROOT_FOLDER, url);
-    fs.readFile(targetFile, function (err, data) {
+    fs.readFile(targetFile, async function (err, data) {
         if (err) {
-            errorUtils.send404Error(res, "File's not found");
+            await errorUtils.send404Error(res, "File's not found");
             return;
         }
 

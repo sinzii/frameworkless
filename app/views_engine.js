@@ -61,12 +61,19 @@ function registerTemplates() {
     });
 }
 
+const registerHelpers = () => {
+    Handlebars.registerHelper('equals', (currentPath, targetPath, options) => {
+        return currentPath === targetPath;
+    });
+}
+
 /**
  * Setup views
  */
 const setup = function () {
     registerPartialTemplates();
     registerTemplates();
+    registerHelpers();
 };
 
 /**
@@ -97,14 +104,18 @@ const getTemplate = function (name) {
     });
 };
 
-const render = async function (res, name, data) {
+const render = async function (req, res, name, data) {
     const page = await getTemplate(name);
 
     res.setHeader('Content-Type', 'text/html');
 
-    res.end(page(data));
-}
+    const templateData = {_req: req};
+    if (data) {
+        Object.assign(templateData, data);
+    }
 
+    res.end(page(templateData));
+}
 
 module.exports = {
     setup,

@@ -17,9 +17,9 @@
                 </a>
 
                 <ul class="nav col-12 col-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="/" class="nav-link px-4 link-dark">Home</a></li>
-                    <li><a href="/showcases" class="nav-link px-4 link-dark">Showcases</a></li>
-                    <li><a href="/about" class="nav-link px-4 link-dark">About</a></li>
+                    <li><a href="/" class="nav-link px-4 {{#if (equals _req.path "/")}}link-secondary{{else}}link-dark{{/if}}">Home</a></li>
+                    <li><a href="/showcases" class="nav-link px-4 {{#if (equals _req.path "/showcases")}}link-secondary{{else}}link-dark{{/if}}">Showcases</a></li>
+                    <li><a href="/about" class="nav-link px-4 {{#if (equals _req.path "/about")}}link-secondary{{else}}link-dark{{/if}}">About</a></li>
                 </ul>
             </div>
         </header>
@@ -27,11 +27,11 @@
             {{> @partial-block }}
         </main>
     </div>
-    <footer class="main-footer py-3 mt-5">
-        <div class="container text-center">
-            <p class="mb-0">Online users: <span class="online-users-counter fw-bold">&nbsp;</span></p>
-        </div>
-    </footer>
+    <div class="container text-center mt-5">
+        <footer class="main-footer py-3 border-top">
+            <p class="mb-0">Frameworkless / 2021 - Online users: <span class="online-users-counter fw-bold">&nbsp;</span></p>
+        </footer>
+    </div>
 
     <script src="public/js/index.js"></script>
 </body>
