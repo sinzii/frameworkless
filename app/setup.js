@@ -10,7 +10,7 @@ const setupApplication = async () => {
     viewsEngine.setup();
 
     logger.debug("Load controllers");
-    loader.loadController('./controllers');
+    loader.loadControllers('./controllers');
 };
 
 module.exports = setupApplication;

@@ -19,11 +19,11 @@ const loadModules = (moduleDir, filePredicate) => {
     }
 }
 
-const loadController = (controllerDir) => {
+const loadControllers = (controllerDir) => {
     loadModules(controllerDir, (fileName) => fileName.endsWith('controller.js'));
 }
 
 module.exports = {
     loadModules,
-    loadController
+    loadControllers
 }
