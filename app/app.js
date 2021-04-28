@@ -1,4 +1,5 @@
 const errorUtils = require('./utils/error');
+const requestUtils = require('./utils/request');
 const staticFileHandler = require('./static_file_handler');
 const router = require('./router');
 const logger = require('log4js').getLogger('app');
@@ -9,6 +10,9 @@ const staticDirs = ['public'];
 const requestHandler = async function (req, res) {
     const {method, url} = req;
     httpLogger.debug(`${method} - ${url}`);
+
+    requestUtils.parseRequestUrl(req);
+    requestUtils.parseRequestBody(req);
 
     // Serve static files
     const served = staticFileHandler(staticDirs, req, res);

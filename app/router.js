@@ -19,10 +19,10 @@ methods.forEach((method) => {
 });
 
 router.getMatchedRoute = (req) => {
-    const { method, url } = req;
+    const { method, path } = req;
 
     for (const route of router.routes) {
-        if (route.matched(method, url || '/')) {
+        if (route.matched(method, path || '/')) {
             return route;
         }
     }
