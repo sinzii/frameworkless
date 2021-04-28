@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "nodemon --trace-warnings index.js",
-    "debug": "nodemon --inspect=0.0.0.0 index.js"
+    "start": "FWL_DOTENV_PATH=.env node index.js",
+    "dev": "FWL_DOTENV_PATH=.env nodemon --trace-warnings index.js",
+    "debug": "FWL_DOTENV_PATH=.env nodemon --inspect=0.0.0.0 index.js"
   },
   "author": "@sinzii",
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^5.0.0-beta3",
+    "dotenv": "^8.2.0",
     "handlebars": "^4.7.3",
     "jquery": "^3.6.0",
     "log4js": "^6.3.0",

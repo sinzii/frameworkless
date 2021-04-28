@@ -1,6 +1,6 @@
-const http = require('http')
-
+require('./config');
 const setupApplication = require('./setup');
+const http = require('http');
 const app = require('./app');
 const logger = require('log4js').getLogger('app');
 const { bootstrapWebsocketServer } = require('./ws');
