@@ -1,9 +1,7 @@
-// setup logger
-require('./config/logger');
-
 const http = require('http')
-const app = require('./app');
+
 const setupApplication = require('./setup');
+const app = require('./app');
 const logger = require('log4js').getLogger('app');
 const { bootstrapWebsocketServer } = require('./ws');
 
