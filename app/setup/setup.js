@@ -1,11 +1,11 @@
 const viewsEngine = require('../views_engine');
 const loader = require('../loader');
 const logger = require('log4js').getLogger('setup');
+const connect = require('./db');
 
 const setupApplication = async () => {
-    // load configuration
-
-    // load database connection
+    logger.debug("Connect database");
+    await connect();
 
     logger.debug("Setup view engine");
     viewsEngine.setup();
