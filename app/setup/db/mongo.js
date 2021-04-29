@@ -11,9 +11,7 @@ const connect = async () => {
     });
 
     try {
-        await mongoClient.connect();
-
-        return mongoClient;
+        return await mongoClient.connect();
     } catch (e) {
         logger.error("Cannot connect to mongo db, please check again the mongo server connection");
         throw e;

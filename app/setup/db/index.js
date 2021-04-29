@@ -42,6 +42,8 @@ const disconnect = async () => {
     }
 }
 
-module.exports = connect;
-module.exports.dbClient = dbClient;
-module.exports.disconnect = disconnect;
+module.exports = {
+    connect,
+    disconnect,
+    dbClient
+};
