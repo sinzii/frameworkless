@@ -17,13 +17,14 @@ http.ServerResponse.prototype.sendJson = function (data, statusCode = 200) {
     }
 }
 /**
- * Send html to client
+ * Send content with custom content type to client
  *
  * @param content
  * @param statusCode
+ * @param contentType
  */
-http.ServerResponse.prototype.send = function (content, statusCode = 200) {
-    this.setHeader('Content-Type', 'text/html');
+http.ServerResponse.prototype.send = function (content, statusCode = 200, contentType = 'text/html') {
+    this.setHeader('Content-Type', contentType);
     this.statusCode = statusCode;
     this.end(content);
 }

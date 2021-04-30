@@ -29,8 +29,7 @@ const staticFileHandler = (staticDirs, req, res) => {
             return;
         }
 
-        res.setHeader('Content-Type', mime.contentType(path.extname(targetFile)));
-        res.end(data);
+        res.send(data, undefined, mime.contentType(path.extname(targetFile)));
     });
 
     return true;

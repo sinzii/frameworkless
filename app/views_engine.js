@@ -107,14 +107,12 @@ const getTemplate = function (name) {
 const render = async function (req, res, name, data) {
     const page = await getTemplate(name);
 
-    res.setHeader('Content-Type', 'text/html');
-
     const templateData = {_req: req};
     if (data) {
         Object.assign(templateData, data);
     }
 
-    res.end(page(templateData));
+    res.send(page(templateData));
 }
 
 module.exports = {
