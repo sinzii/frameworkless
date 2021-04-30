@@ -9,7 +9,32 @@ const http = require('http');
 http.ServerResponse.prototype.sendJson = function (data, statusCode = 200) {
     this.setHeader('Content-Type', 'application/json');
     this.statusCode = statusCode;
-    this.end(JSON.stringify(data));
+
+    if (data) {
+        this.end(JSON.stringify(data));
+    } else {
+        this.end();
+    }
+}
+/**
+ * Send html to client
+ *
+ * @param content
+ * @param statusCode
+ */
+http.ServerResponse.prototype.send = function (content, statusCode = 200) {
+    this.setHeader('Content-Type', 'text/html');
+    this.statusCode = statusCode;
+    this.end(content);
+}
+
+/**
+ * Send an empty response with status code to client
+ * @param statusCode
+ */
+http.ServerResponse.prototype.sendEmpty = function (statusCode = 200) {
+    this.statusCode = statusCode;
+    this.end();
 }
 
 /**
