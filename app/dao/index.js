@@ -1,20 +1,15 @@
-const fs = require('fs');
-const path = require('path');
 const config = require('../config');
+const loader = require('../loader');
 
 module.exports = exports = {};
 
 const dbType = config['DB_TYPE'];
+const excludeFiles = ['base.js'];
 
-const daoDir = path.join(__dirname, dbType);
-const files = fs.readdirSync(daoDir);
-
-for (const file of files) {
-    if (file === 'base.js') {
-        continue;
+loader.loadModules(
+    `./dao/${dbType}`,
+    (file) => !excludeFiles.includes(file),
+    (mod) => {
+        exports[mod.constructor.name] = mod;
     }
-
-    const module = file.replace('.js', '');
-    const dao = require(`./${dbType}/${module}`);
-    exports[dao.constructor.name] = dao;
-}
+)

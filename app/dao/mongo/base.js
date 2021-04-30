@@ -1,6 +1,8 @@
 const { getDbClient } = require('../../setup/db');
+const BaseModel = require('../../model');
+const { ObjectId } = require('mongodb');
 
-class BaseDaoDieuLinh { // don't get confused, that's my crush's name =))), originally BaseDao
+class BaseDaoDieuLinh extends BaseModel { // don't get confused, that's my crush's name =))), originally BaseDao
     get dbClient() {
         return getDbClient();
     }
@@ -9,12 +11,8 @@ class BaseDaoDieuLinh { // don't get confused, that's my crush's name =))), orig
         return this.dbClient.currentDb;
     }
 
-    get collectionName() {
-        throw new Error('Please override getter collectionName to provide collection name for current DAO');
-    }
-
     get currentCollection() {
-        return this.db.collection(this.collectionName);
+        return this.db.collection(this.currentModel);
     }
 
     async findOne(query, options) {
@@ -23,18 +21,13 @@ class BaseDaoDieuLinh { // don't get confused, that's my crush's name =))), orig
     }
 
     async findById(id) {
-        const query = {
-            _id: id
-        };
-
-        return this.findOne(query);
+        return this.findOne({ _id: this.objectId(id) });
     }
 
     async find(query, options) {
         const cursor = this.currentCollection.find(query, options);
         const docs = await cursor.toArray();
         return docs.map(this.usingId);
-
     }
 
     async create(data) {
@@ -53,7 +46,7 @@ class BaseDaoDieuLinh { // don't get confused, that's my crush's name =))), orig
         }
 
         delete data.id;
-        const result = this.currentCollection.updateOne({ _id: id }, { $set: data }, { upsert: false });
+        const result = this.currentCollection.updateOne({ _id: this.objectId(id) }, { $set: data }, { upsert: false });
         if (result.modifiedCount === 0) {
             throw new Error('Document\'s not found');
         }
@@ -69,10 +62,22 @@ class BaseDaoDieuLinh { // don't get confused, that's my crush's name =))), orig
     }
 
     usingId(doc) {
+        if (!doc) {
+            return doc;
+        }
+
         doc.id = doc._id;
         delete doc._id;
 
         return doc;
+    }
+
+    objectId(id) {
+        if (id instanceof ObjectId) {
+            return id;
+        }
+
+        return new ObjectId(id);
     }
 }
 

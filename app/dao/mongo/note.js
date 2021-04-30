@@ -1,8 +1,8 @@
 const BaseDao = require('./base');
 
 class NoteDao extends BaseDao {
-    get collectionName() {
-        return 'note';
+    get currentModel() {
+        return this.models.NOTE;
     }
 }
 

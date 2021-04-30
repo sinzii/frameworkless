@@ -1,8 +1,8 @@
 const BaseDao = require('./base');
 
 class UserDao extends BaseDao {
-    get collectionName() {
-        return 'user';
+    get currentModel() {
+        return this.models.USER;
     }
 
     async findByEmail(email) {
