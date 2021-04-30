@@ -3,7 +3,8 @@ const { MongoClient } = require('mongodb');
 const logger = require('log4js').getLogger('setup/db/mongo');
 
 const connect = async () => {
-    const mongoUrl = config['DB_URL'];
+    const { DB_HOST, DB_PORT, DB_NAME } = config;
+    const mongoUrl = `mongodb://${DB_HOST}:${DB_PORT}`;
 
     const mongoClient = new MongoClient(mongoUrl, {
         useUnifiedTopology: true,
@@ -11,7 +12,10 @@ const connect = async () => {
     });
 
     try {
-        return await mongoClient.connect();
+        await mongoClient.connect();
+        mongoClient.currentDb = mongoClient.db(DB_NAME);
+
+        return mongoClient;
     } catch (e) {
         logger.error("Cannot connect to mongo db, please check again the mongo server connection");
         throw e;

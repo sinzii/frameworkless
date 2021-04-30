@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const logger = require('log4js').getLogger('loader');
 
 const loadModules = (moduleDir, filePredicate) => {
     const files = fs.readdirSync(path.join(__dirname, moduleDir));
@@ -10,6 +11,7 @@ const loadModules = (moduleDir, filePredicate) => {
         }
 
         const filePath = path.join(__dirname, moduleDir, file);
+        logger.debug('Load module', filePath);
         const stat = fs.lstatSync(filePath)
 
         if (stat.isFile()) {
@@ -23,7 +25,12 @@ const loadControllers = (controllerDir) => {
     loadModules(controllerDir, (fileName) => fileName.endsWith('controller.js'));
 }
 
+const loadRestApi = (restApiDir) => {
+    loadModules(restApiDir, (fileName) => fileName.endsWith('resource.js'));
+}
+
 module.exports = {
     loadModules,
-    loadControllers
+    loadControllers,
+    loadRestApi
 }
