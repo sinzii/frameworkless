@@ -31,7 +31,7 @@ class BaseDaoDieuLinh extends BaseModel { // don't get confused, that's my crush
     }
 
     async create(data) {
-        const result = this.currentCollection.insertOne(data);
+        const result = await this.currentCollection.insertOne(data);
         if (result.insertedCount === 0) {
             throw Error('There was a problem while trying to insert a new document');
         }
@@ -46,7 +46,7 @@ class BaseDaoDieuLinh extends BaseModel { // don't get confused, that's my crush
         }
 
         delete data.id;
-        const result = this.currentCollection.updateOne({ _id: this.objectId(id) }, { $set: data }, { upsert: false });
+        const result = await this.currentCollection.updateOne({ _id: this.objectId(id) }, { $set: data }, { upsert: false });
         if (result.modifiedCount === 0) {
             throw new Error('Document\'s not found');
         }
