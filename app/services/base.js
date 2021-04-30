@@ -36,6 +36,10 @@ class BaseService extends BaseModel {
 
         return this.create(data);
     }
+
+    async find() {
+        return this.getModelDao().find();
+    }
 }
 
 module.exports = BaseService;
