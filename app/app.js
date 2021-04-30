@@ -13,7 +13,7 @@ const requestHandler = async function (req, res) {
     httpLogger.debug(`${method} - ${url}`);
 
     requestUtils.parseRequestUrl(req);
-    requestUtils.parseRequestBody(req);
+    await requestUtils.parseRequestBody(req);
 
     // Serve static files
     const served = staticFileHandler(staticDirs, req, res);

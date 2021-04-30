@@ -21,6 +21,7 @@
     "mime-types": "^2.1.26",
     "mongodb": "^3.6.6",
     "progress": "^2.0.3",
+    "raw-body": "^2.4.1",
     "socket.io": "^4.0.1",
     "socket.io-client": "^4.0.1",
     "yup": "^0.32.9"
