@@ -4,6 +4,7 @@ const staticFileHandler = require('./static_file_handler');
 const router = require('./router');
 const logger = require('log4js').getLogger('app');
 const httpLogger = require('log4js').getLogger('http');
+const { StatusCodes } = require('http-status-codes');
 
 const staticDirs = ['public'];
 
@@ -34,7 +35,19 @@ const app = async (req, res) => {
         await requestHandler(req, res);
     } catch (e) {
         logger.error(e);
-        await errorUtils.sendErrorCode(res, 500, e.message);
+
+        if (e instanceof FwlError) {
+            await e.handleResponse(res);
+            return;
+        }
+
+        const generalErrMsg = 'There was a problem occurred while processing the request';
+
+        if (req.isRestApiRequest()) {
+            res.sendJson({ message: generalErrMsg }, StatusCodes.INTERNAL_SERVER_ERROR);
+        } else {
+            await errorUtils.sendErrorCode(res, StatusCodes.INTERNAL_SERVER_ERROR, generalErrMsg);
+        }
     }
 }
 

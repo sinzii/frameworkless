@@ -4,22 +4,25 @@ const logger = require('log4js').getLogger('setup');
 const db = require('./db');
 
 const setupApplication = async () => {
-    logger.debug("Connect database");
+    logger.debug('Connect database');
     await db.connect();
 
-    logger.debug("Load data access objects");
+    logger.debug('Load data access objects');
     require('../dao');
 
-    logger.debug("Load business services");
+    logger.debug('Load business services');
     require('../services');
 
-    logger.debug("Load controllers");
+    logger.debug('Load data validator');
+    require('../validator');
+
+    logger.debug('Load controllers');
     loader.loadControllers('./controllers');
 
-    logger.debug("Load rest api");
+    logger.debug('Load rest api');
     loader.loadRestApi('./rest_api');
 
-    logger.debug("Setup view engine");
+    logger.debug('Setup view engine');
     viewsEngine.setup();
 };
 

@@ -50,6 +50,8 @@ class BaseDaoDieuLinh extends BaseModel { // don't get confused, that's my crush
         if (result.modifiedCount === 0) {
             throw new Error('Document\'s not found');
         }
+
+        return id;
     }
 
     async upsert(data) {
