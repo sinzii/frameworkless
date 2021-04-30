@@ -1,13 +1,13 @@
 const BaseModel = require('../model');
-const StringUtils = require('../utils/string');
 const daoPool = require('../dao');
+const { validate } = require('../validator');
 
 class BaseService extends BaseModel {
     getModelDao() {
-        const daoName = StringUtils.capitalize(this.currentModel) + 'Dao';
+        const daoName = `${this.currentModelCapitalized}Dao`;
         const modelDao = daoPool[daoName];
         if (!modelDao) {
-            throw new BusinessError(`There is no DAO for model ${this.currentModel}`);
+            throw new BusinessError(`There is no DAO for model ${this.currentModelCapitalized}`);
         }
 
         return modelDao;
@@ -18,15 +18,23 @@ class BaseService extends BaseModel {
     }
 
     async create(data) {
-
+        const validationSchemaName = `Create${this.currentModelCapitalized}Schema`;
+        await validate(validationSchemaName, data);
+        return this.getModelDao().create(data);
     }
 
     async update(data) {
-
+        const validationSchemaName = `Update${this.currentModelCapitalized}Schema`;
+        await validate(validationSchemaName, data);
+        return this.getModelDao().update(data);
     }
 
     async upsert(data) {
+        if (data.id) {
+            return this.update(data);
+        }
 
+        return this.create(data);
     }
 }
 

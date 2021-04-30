@@ -21,7 +21,8 @@
     "mongodb": "^3.6.6",
     "progress": "^2.0.3",
     "socket.io": "^4.0.1",
-    "socket.io-client": "^4.0.1"
+    "socket.io-client": "^4.0.1",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "browser-sync": "^2.26.14",
