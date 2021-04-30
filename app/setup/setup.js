@@ -7,11 +7,20 @@ const setupApplication = async () => {
     logger.debug("Connect database");
     await db.connect();
 
-    logger.debug("Setup view engine");
-    viewsEngine.setup();
+    logger.debug("Load data access objects");
+    require('../dao');
+
+    logger.debug("Load business services");
+    require('../services');
 
     logger.debug("Load controllers");
     loader.loadControllers('./controllers');
+
+    logger.debug("Load rest api");
+    loader.loadRestApi('./rest_api');
+
+    logger.debug("Setup view engine");
+    viewsEngine.setup();
 };
 
 module.exports = setupApplication;
