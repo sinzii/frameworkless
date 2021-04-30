@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const logger = require('log4js').getLogger('loader');
 
-const loadModules = (moduleDir, filePredicate) => {
+const loadModules = (moduleDir, filePredicate, afterLoadingModule) => {
     const files = fs.readdirSync(path.join(__dirname, moduleDir));
 
     for (const file of files) {
@@ -16,7 +16,11 @@ const loadModules = (moduleDir, filePredicate) => {
 
         if (stat.isFile()) {
             const moduleName = file.replace('.js', '');
-            require(`./${moduleDir}/${moduleName}`);
+            const mod = require(`./${moduleDir}/${moduleName}`);
+
+            if (typeof afterLoadingModule === 'function') {
+                afterLoadingModule(mod);
+            }
         }
     }
 }

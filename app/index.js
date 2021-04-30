@@ -4,9 +4,13 @@ const http = require('http');
 const app = require('./app');
 const logger = require('log4js').getLogger('app');
 const { bootstrapWebsocketServer } = require('./ws');
+const loader = require('./loader');
+
+logger.debug('Load global error classes')
+loader.loadModules('./errors');
 
 const bootstrapping = async () => {
-    logger.debug("Bootstrapping the server");
+    logger.debug('Bootstrapping the server');
     const httpServer = http.createServer(app);
     bootstrapWebsocketServer(httpServer);
 
