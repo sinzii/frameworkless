@@ -1,4 +1,6 @@
 require('./config');
+require('./customization');
+
 const setupApplication = require('./setup');
 const http = require('http');
 const app = require('./app');
