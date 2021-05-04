@@ -30,7 +30,7 @@
     "browser-sync": "^2.26.14",
     "browserify": "^17.0.0",
     "glob": "^7.1.6",
-    "gulp": "^4.0.2",
+    "gulp": "^3.9.1",
     "gulp-sass": "^4.1.0",
     "nodemon": "^2.0.2",
     "tinyify": "^3.0.0",
