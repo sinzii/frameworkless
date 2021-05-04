@@ -22,7 +22,7 @@ router.get('/api/note', getNotes);
  * @param res
  */
 const newNote = async (req, res) => {
-    const noteId = await NoteService.create(req.body);
+    const noteId = await NoteService.create(req.body, null);
 
     res.sendJson(await NoteService.findById(noteId));
 }

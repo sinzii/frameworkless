@@ -17,24 +17,32 @@ class BaseService extends BaseModel {
         return this.getModelDao().findById(id);
     }
 
-    async create(data) {
+    async create(data, creatorId) {
         const validationSchemaName = `Create${this.currentModelCapitalized}Schema`;
         await validate(validationSchemaName, data);
+
+        data.createdBy = creatorId;
+        data.createdAt = new Date();
+
         return this.getModelDao().create(data);
     }
 
-    async update(data) {
+    async update(data, updaterId) {
         const validationSchemaName = `Update${this.currentModelCapitalized}Schema`;
         await validate(validationSchemaName, data);
+
+        data.updatedBy = updaterId;
+        data.updatedAt = new Date();
+
         return this.getModelDao().update(data);
     }
 
-    async upsert(data) {
+    async upsert(data, userId) {
         if (data.id) {
-            return this.update(data);
+            return this.update(data, userId);
         }
 
-        return this.create(data);
+        return this.create(data, userId);
     }
 
     async find() {
