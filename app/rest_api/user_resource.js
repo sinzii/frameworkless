@@ -16,6 +16,21 @@ const getUsers = async (req, res) => {
 router.get('/api/user', getUsers);
 
 /**
+ * Get user info by id
+ *
+ * @param req
+ * @param res
+ */
+const getUser = async (req, res) => {
+    const targetUser = await UserService.findById(req.params.id);
+    UserService.removeSensitiveInformation(targetUser);
+
+    res.sendJson(targetUser);
+}
+
+router.get('/api/user/:id', getUser);
+
+/**
  * Register new user
  *
  * @param req

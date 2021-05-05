@@ -16,6 +16,20 @@ const getNotes = async (req, res) => {
 router.get('/api/note', getNotes);
 
 /**
+ * Get information of a note by id
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+const getNote = async (req, res) => {
+    const note = await NoteService.findById(req.params.id);
+
+    res.sendJson(note);
+}
+
+router.get('/api/note/:id', getNote);
+
+/**
  * Create new note
  *
  * @param req

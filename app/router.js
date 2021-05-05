@@ -22,7 +22,10 @@ router.getMatchedRoute = (req) => {
     const { method, path } = req;
 
     for (const route of router.routes) {
-        if (route.matched(method, path || '/')) {
+        const [matched, params] = route.matched(method, path || '/');
+
+        if (matched) {
+            req.params = params;
             return route;
         }
     }
