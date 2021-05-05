@@ -28,3 +28,18 @@ const newNote = async (req, res) => {
 }
 
 router.post('/api/note', newNote);
+
+
+/**
+ * Update an existed note
+ *
+ * @param req
+ * @param res
+ */
+const updateNote = async (req, res) => {
+    const noteId = await NoteService.update(req.body, null);
+
+    res.sendJson(await NoteService.findById(noteId));
+}
+
+router.put('/api/note', updateNote);
