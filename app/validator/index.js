@@ -22,8 +22,10 @@ const getSchema = (name) => {
     return schema;
 }
 
-const validate = async (schemaName, data, options) => {
+const validate = async (schemaName, data, options = {}) => {
     const schema = getSchema(schemaName);
+
+    const { omitFields = [] } = options;
 
     const opts = {
         stripUnknown: true,
@@ -33,7 +35,7 @@ const validate = async (schemaName, data, options) => {
     Object.assign(opts, options);
 
     try {
-        await schema.validate(data, opts);
+        await schema.omit(omitFields).validate(data, opts);
     } catch (e) {
         let errors = null;
 

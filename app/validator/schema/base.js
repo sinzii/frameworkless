@@ -1,11 +1,11 @@
 const yup = require('yup');
 
 const BaseSchema = {
-    id: yup.number().required(),
-    createdAt: yup.date(),
-    createdBy: yup.number(),
-    updatedAt: yup.date(),
-    updatedBy: yup.number()
+    id: yup.string().required(),
+    createdAt: yup.date().nullable().default(null),
+    createdBy: yup.string().nullable().default(null),
+    updatedAt: yup.date().nullable().default(null),
+    updatedBy: yup.string().nullable().default(null)
 }
 
 module.exports = BaseSchema;
