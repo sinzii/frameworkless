@@ -1,6 +1,6 @@
-require('./config');
 require('./customization');
 
+const config = require('./config');
 const setupApplication = require('./setup');
 const http = require('http');
 const app = require('./app');
@@ -16,7 +16,7 @@ const bootstrapping = async () => {
     const httpServer = http.createServer(app);
     bootstrapWebsocketServer(httpServer);
 
-    const port = 3000;
+    const port = config['HTTP_PORT'] || 3000;
     httpServer.listen(port, function() {
         logger.info(`Server started at http://localhost:${port}`);
     });
