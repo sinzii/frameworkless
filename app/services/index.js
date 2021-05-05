@@ -2,7 +2,7 @@ const loader = require('../loader');
 
 module.exports = exports = {};
 
-const excludeFiles = ['base.js', 'index.js']
+const excludeFiles = ['BaseService.js', 'index.js']
 loader.loadModules(
     './services',
     (file) => !excludeFiles.includes(file),

@@ -1,5 +1,5 @@
 const yup = require('yup');
-const BaseSchema = require('./base');
+const BaseSchema = require('./BaseSchema');
 
 const NoteSchema = yup.object().shape(Object.assign({
     title: yup.string().required().max(5000).default(''),

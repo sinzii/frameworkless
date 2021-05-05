@@ -1,5 +1,5 @@
 const yup = require('yup');
-const BaseSchema = require('./base');
+const BaseSchema = require('./BaseSchema');
 
 const UserSchema = yup.object().shape(Object.assign({
     email: yup.string().email().required().max(100).meta({ unique: true }),

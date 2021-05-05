@@ -1,4 +1,4 @@
-const BaseDao = require('./base');
+const BaseDao = require('./BaseDao');
 
 class UserDao extends BaseDao {
     get currentModel() {

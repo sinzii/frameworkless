@@ -1,4 +1,4 @@
-const BaseService = require('./base');
+const BaseService = require('./BaseService');
 
 class NoteService extends BaseService {
     get currentModel() {

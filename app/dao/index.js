@@ -4,7 +4,7 @@ const loader = require('../loader');
 module.exports = exports = {};
 
 const dbType = config['DB_TYPE'];
-const excludeFiles = ['base.js'];
+const excludeFiles = ['BaseDao.js'];
 
 loader.loadModules(
     `./dao/${dbType}`,

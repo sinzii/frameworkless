@@ -1,4 +1,4 @@
-const BaseService = require('./base');
+const BaseService = require('./BaseService');
 const validator = require('../validator');
 const crypto = require('crypto');
 
