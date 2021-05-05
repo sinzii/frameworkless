@@ -1,5 +1,5 @@
 /**
- * Since there's no session library for pure NodeJs application,
+ * Since there's no session library for pure NodeJs application (as far as what I've searched),
  * so to save time from building from scratch one.
  * I decided to use express-session for session management purpose.
  *
