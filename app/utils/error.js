@@ -7,7 +7,7 @@ const sendErrorCode = async (res, statusCode = 500, message) => {
         const errorPage = await viewsEngine.getTemplate(`error_${statusCode}`);
         res.send(errorPage({message, statusCode}), statusCode);
     } catch (e) {
-        res.send(message, statusCode, 'text/plain');
+        res.send(`${statusCode} - ${message}`, statusCode, 'text/plain');
     }
 }
 
