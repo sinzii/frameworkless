@@ -1,4 +1,4 @@
-const FwlError = require('./fwl_error');
+const FwlError = require('./FwlError');
 const { StatusCodes } = require('http-status-codes');
 
 class ResourceNotFoundError extends FwlError {

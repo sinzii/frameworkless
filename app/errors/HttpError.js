@@ -1,4 +1,4 @@
-const FwlError = require('./fwl_error');
+const FwlError = require('./FwlError');
 
 class HttpError extends FwlError {
 

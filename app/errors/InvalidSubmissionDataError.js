@@ -1,4 +1,4 @@
-const BusinessError = require('./business_error');
+const BusinessError = require('./BusinessError');
 const { StatusCodes } = require('http-status-codes')
 
 class InvalidSubmissionDataError extends BusinessError {
