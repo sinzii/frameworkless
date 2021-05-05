@@ -35,7 +35,7 @@ const validate = async (schemaName, data, options = {}) => {
     Object.assign(opts, options);
 
     try {
-        await schema.omit(omitFields).validate(data, opts);
+        return await schema.omit(omitFields).validate(data, opts);
     } catch (e) {
         let errors = null;
 

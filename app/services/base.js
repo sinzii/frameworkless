@@ -3,7 +3,7 @@ const daoPool = require('../dao');
 const { validate } = require('../validator');
 
 class BaseService extends BaseModel {
-    getModelDao() {
+    get modelDao() {
         const daoName = `${this.currentModelCapitalized}Dao`;
         const modelDao = daoPool[daoName];
         if (!modelDao) {
@@ -14,7 +14,7 @@ class BaseService extends BaseModel {
     }
 
     async findById(id) {
-        return this.getModelDao().findById(id);
+        return this.modelDao.findById(id);
     }
 
     async create(doc, creatorId) {
@@ -22,9 +22,9 @@ class BaseService extends BaseModel {
         doc.createdAt = new Date();
 
         const validationSchemaName = `${this.currentModelCapitalized}Schema`;
-        await validate(validationSchemaName, doc, { omitFields: ['id'] });
+        doc = await validate(validationSchemaName, doc, { omitFields: ['id'] });
 
-        return this.getModelDao().create(doc);
+        return this.modelDao.create(doc);
     }
 
     async update(doc, updaterId) {
@@ -33,9 +33,9 @@ class BaseService extends BaseModel {
 
         console.log(doc);
         const validationSchemaName = `${this.currentModelCapitalized}Schema`;
-        await validate(validationSchemaName, doc);
+        doc = await validate(validationSchemaName, doc);
 
-        return this.getModelDao().update(doc);
+        return this.modelDao.update(doc);
     }
 
     async upsert(doc, userId) {
@@ -47,7 +47,7 @@ class BaseService extends BaseModel {
     }
 
     async find() {
-        return this.getModelDao().find();
+        return this.modelDao.find();
     }
 }
 
