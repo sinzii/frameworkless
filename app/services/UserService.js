@@ -79,6 +79,10 @@ class UserService extends BaseService {
 
         return docs;
     }
+
+    async findByEmail(email) {
+        return await this.modelDao.findByEmail(email);
+    }
 }
 
 module.exports = new UserService();

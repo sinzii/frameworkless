@@ -1,3 +1,33 @@
-<fieldset>
-    <h3>This is login form!!</h3>
-</fieldset>
+<h3 class="mb-4">Login</h3>
+<form action="/login" method="POST">
+    {{#if message}}
+        <div class="alert alert-danger" role="alert">{{message}}</div>
+    {{/if}}
+
+    <div class="mb-3">
+        <label class="form-label" for="email">Email address</label>
+        <input type="email" required class="form-control {{#if errors.email}}is-invalid{{/if}}" id="email"
+               name="email" placeholder="name@example.com" value="{{formInput.email}}">
+        {{#if errors.email}}
+            <div class="invalid-feedback">{{errors.email}}</div>
+        {{/if}}
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" class="form-control {{#if errors.password}}is-invalid{{/if}}" id="password"
+               name="password" placeholder="Password">
+        {{#if errors.password}}
+            <div class="invalid-feedback">{{errors.password}}</div>
+        {{/if}}
+    </div>
+    <div class="form-footer">
+        <div class="float-start">
+            <p class="mb-2"><button type="submit" class="btn btn-primary">Login</button></p>
+            <p><button type="submit" class="btn btn-primary">Login using Ajax</button></p>
+        </div>
+        <div class="float-end">
+            <p class="mb-1 text-end"><a href="/forget-password" class="text-decoration-underline text-secondary">Forget password?</a></p>
+            <p class="text-secondary text-end">Not a member? <a href="/signup" class="text-decoration-underline text-primary">Signup</a></p>
+        </div>
+    </div>
+</form>

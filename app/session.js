@@ -13,7 +13,8 @@ const expressSession = require('express-session');
 const maxAgeInMinute = config['HTTP_SESSION_MAX_AGE_IN_MINUTE'] || 60;
 
 const sessionFn = expressSession({
-    secret: config['HTTP_SESSION_SECRET'],
+    name: 'FWL-SESSION-ID',
+    secret: config['SECURITY_SIGNING_SECRET'],
     saveUninitialized: true,
     resave: false,
     cookie: {

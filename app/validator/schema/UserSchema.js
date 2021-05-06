@@ -14,7 +14,12 @@ const RegisterUserSchema = UserSchema.pick(['name', 'email']).shape({
     confirmPassword: yup.string().min(6).max(20).required()
 });
 
+const LoginSchema = UserSchema.pick(['email']).shape({
+    password: yup.string().required().max(20),
+});
+
 module.exports = {
     UserSchema,
     RegisterUserSchema,
+    LoginSchema
 }
