@@ -39,6 +39,18 @@ http.ServerResponse.prototype.sendEmpty = function (statusCode = 200) {
 }
 
 /**
+ * Send redirect
+ *
+ * @param url
+ * @param statusCode
+ */
+http.ServerResponse.prototype.sendRedirect = function (url, statusCode = 302) {
+    this.statusCode = statusCode;
+    this.setHeader('Location', url);
+    this.end();
+}
+
+/**
  * Check if current request is a rest api request which start with /api in the path
  *
  * @returns boolean
