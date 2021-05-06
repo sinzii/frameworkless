@@ -22,6 +22,7 @@ const requestHandler = async function (req, res) {
     requestUtils.parseRequestUrl(req);
     await requestUtils.parseRequestBody(req);
     await session(req, res);
+    req.mergeFlashAttrs();
 
     // detect route and serve
     const route = router.getMatchedRoute(req);
