@@ -11,7 +11,7 @@ const queryStringToMap = (queryString) => {
     for (const each of qs) {
         const [name, value] = each.split('=');
         if (name) {
-            query[name] = value;
+            query[name] = decodeURIComponent(value);
         }
     }
 
