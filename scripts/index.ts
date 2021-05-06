@@ -17,6 +17,13 @@ const bootstrapClientSocket = () => {
     }).emit('subscribe', 'NUMBER_ONLINE_CLIENTS');
 }
 
+const formOnSubmit = () => {
+    $('form').on('submit', (e) => {
+        $('.disable-on-submit').attr('disabled', 'disabled');
+    });
+}
+
 $(document).ready(function () {
     bootstrapClientSocket();
+    formOnSubmit();
 });

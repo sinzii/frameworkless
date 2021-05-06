@@ -2079,7 +2079,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":3,"buffer":4,"ieee754":25}],5:[function(require,module,exports){
+},{"base64-js":3,"buffer":4,"ieee754":26}],5:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -2283,7 +2283,7 @@ module.exports.Transport = require("./transport");
 module.exports.transports = require("./transports/index");
 module.exports.parser = require("engine.io-parser");
 
-},{"./socket":8,"./transport":9,"./transports/index":10,"engine.io-parser":23}],8:[function(require,module,exports){
+},{"./socket":8,"./transport":9,"./transports/index":10,"engine.io-parser":24}],8:[function(require,module,exports){
 const transports = require("./transports/index");
 const Emitter = require("component-emitter");
 const debug = require("debug")("engine.io-client:socket");
@@ -2978,7 +2978,7 @@ function clone(obj) {
 
 module.exports = Socket;
 
-},{"./transports/index":10,"component-emitter":5,"debug":18,"engine.io-parser":23,"parseqs":28,"parseuri":29}],9:[function(require,module,exports){
+},{"./transports/index":10,"component-emitter":5,"debug":18,"engine.io-parser":24,"parseqs":28,"parseuri":29}],9:[function(require,module,exports){
 const parser = require("engine.io-parser");
 const Emitter = require("component-emitter");
 const debug = require("debug")("engine.io-client:transport");
@@ -3099,7 +3099,7 @@ class Transport extends Emitter {
 
 module.exports = Transport;
 
-},{"component-emitter":5,"debug":18,"engine.io-parser":23}],10:[function(require,module,exports){
+},{"component-emitter":5,"debug":18,"engine.io-parser":24}],10:[function(require,module,exports){
 const XMLHttpRequest = require("../../contrib/xmlhttprequest-ssl/XMLHttpRequest");
 const XHR = require("./polling-xhr");
 const JSONP = require("./polling-jsonp");
@@ -3899,7 +3899,7 @@ class Polling extends Transport {
 
 module.exports = Polling;
 
-},{"../transport":9,"debug":18,"engine.io-parser":23,"parseqs":28,"yeast":44}],14:[function(require,module,exports){
+},{"../transport":9,"debug":18,"engine.io-parser":24,"parseqs":28,"yeast":46}],14:[function(require,module,exports){
 const globalThis = require("../globalThis");
 
 module.exports = {
@@ -4176,7 +4176,7 @@ class WS extends Transport {
 module.exports = WS;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../transport":9,"../util":16,"./websocket-constructor":14,"buffer":4,"debug":18,"engine.io-parser":23,"parseqs":28,"yeast":44}],16:[function(require,module,exports){
+},{"../transport":9,"../util":16,"./websocket-constructor":14,"buffer":4,"debug":18,"engine.io-parser":24,"parseqs":28,"yeast":46}],16:[function(require,module,exports){
 module.exports.pick = (obj, ...attr) => {
   return attr.reduce((acc, k) => {
     if (obj.hasOwnProperty(k)) {
@@ -4228,7 +4228,7 @@ module.exports = function(opts) {
   }
 };
 
-},{"./globalThis":6,"has-cors":24}],18:[function(require,module,exports){
+},{"./globalThis":6,"has-cors":25}],18:[function(require,module,exports){
 (function (process){(function (){
 /* eslint-env browser */
 
@@ -4764,7 +4764,171 @@ function setup(env) {
 
 module.exports = setup;
 
-},{"ms":27}],20:[function(require,module,exports){
+},{"ms":20}],20:[function(require,module,exports){
+/**
+ * Helpers.
+ */
+
+var s = 1000;
+var m = s * 60;
+var h = m * 60;
+var d = h * 24;
+var w = d * 7;
+var y = d * 365.25;
+
+/**
+ * Parse or format the given `val`.
+ *
+ * Options:
+ *
+ *  - `long` verbose formatting [false]
+ *
+ * @param {String|Number} val
+ * @param {Object} [options]
+ * @throws {Error} throw an error if val is not a non-empty string or a number
+ * @return {String|Number}
+ * @api public
+ */
+
+module.exports = function(val, options) {
+  options = options || {};
+  var type = typeof val;
+  if (type === 'string' && val.length > 0) {
+    return parse(val);
+  } else if (type === 'number' && isFinite(val)) {
+    return options.long ? fmtLong(val) : fmtShort(val);
+  }
+  throw new Error(
+    'val is not a non-empty string or a valid number. val=' +
+      JSON.stringify(val)
+  );
+};
+
+/**
+ * Parse the given `str` and return milliseconds.
+ *
+ * @param {String} str
+ * @return {Number}
+ * @api private
+ */
+
+function parse(str) {
+  str = String(str);
+  if (str.length > 100) {
+    return;
+  }
+  var match = /^(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
+    str
+  );
+  if (!match) {
+    return;
+  }
+  var n = parseFloat(match[1]);
+  var type = (match[2] || 'ms').toLowerCase();
+  switch (type) {
+    case 'years':
+    case 'year':
+    case 'yrs':
+    case 'yr':
+    case 'y':
+      return n * y;
+    case 'weeks':
+    case 'week':
+    case 'w':
+      return n * w;
+    case 'days':
+    case 'day':
+    case 'd':
+      return n * d;
+    case 'hours':
+    case 'hour':
+    case 'hrs':
+    case 'hr':
+    case 'h':
+      return n * h;
+    case 'minutes':
+    case 'minute':
+    case 'mins':
+    case 'min':
+    case 'm':
+      return n * m;
+    case 'seconds':
+    case 'second':
+    case 'secs':
+    case 'sec':
+    case 's':
+      return n * s;
+    case 'milliseconds':
+    case 'millisecond':
+    case 'msecs':
+    case 'msec':
+    case 'ms':
+      return n;
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * Short format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function fmtShort(ms) {
+  var msAbs = Math.abs(ms);
+  if (msAbs >= d) {
+    return Math.round(ms / d) + 'd';
+  }
+  if (msAbs >= h) {
+    return Math.round(ms / h) + 'h';
+  }
+  if (msAbs >= m) {
+    return Math.round(ms / m) + 'm';
+  }
+  if (msAbs >= s) {
+    return Math.round(ms / s) + 's';
+  }
+  return ms + 'ms';
+}
+
+/**
+ * Long format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function fmtLong(ms) {
+  var msAbs = Math.abs(ms);
+  if (msAbs >= d) {
+    return plural(ms, msAbs, d, 'day');
+  }
+  if (msAbs >= h) {
+    return plural(ms, msAbs, h, 'hour');
+  }
+  if (msAbs >= m) {
+    return plural(ms, msAbs, m, 'minute');
+  }
+  if (msAbs >= s) {
+    return plural(ms, msAbs, s, 'second');
+  }
+  return ms + ' ms';
+}
+
+/**
+ * Pluralization helper.
+ */
+
+function plural(ms, msAbs, n, name) {
+  var isPlural = msAbs >= n * 1.5;
+  return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
+}
+
+},{}],21:[function(require,module,exports){
 const PACKET_TYPES = Object.create(null); // no Map = no polyfill
 PACKET_TYPES["open"] = "0";
 PACKET_TYPES["close"] = "1";
@@ -4787,7 +4951,7 @@ module.exports = {
   ERROR_PACKET
 };
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 const { PACKET_TYPES_REVERSE, ERROR_PACKET } = require("./commons");
 
 const withNativeArrayBuffer = typeof ArrayBuffer === "function";
@@ -4846,7 +5010,7 @@ const mapBinary = (data, binaryType) => {
 
 module.exports = decodePacket;
 
-},{"./commons":20,"base64-arraybuffer":2}],22:[function(require,module,exports){
+},{"./commons":21,"base64-arraybuffer":2}],23:[function(require,module,exports){
 const { PACKET_TYPES } = require("./commons");
 
 const withNativeBlob =
@@ -4894,7 +5058,7 @@ const encodeBlobAsBase64 = (data, callback) => {
 
 module.exports = encodePacket;
 
-},{"./commons":20}],23:[function(require,module,exports){
+},{"./commons":21}],24:[function(require,module,exports){
 const encodePacket = require("./encodePacket");
 const decodePacket = require("./decodePacket");
 
@@ -4938,7 +5102,7 @@ module.exports = {
   decodePayload
 };
 
-},{"./decodePacket":21,"./encodePacket":22}],24:[function(require,module,exports){
+},{"./decodePacket":22,"./encodePacket":23}],25:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -4957,7 +5121,7 @@ try {
   module.exports = false;
 }
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -5044,7 +5208,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v3.6.0
  * https://jquery.com/
@@ -15927,170 +16091,6 @@ if ( typeof noGlobal === "undefined" ) {
 return jQuery;
 } );
 
-},{}],27:[function(require,module,exports){
-/**
- * Helpers.
- */
-
-var s = 1000;
-var m = s * 60;
-var h = m * 60;
-var d = h * 24;
-var w = d * 7;
-var y = d * 365.25;
-
-/**
- * Parse or format the given `val`.
- *
- * Options:
- *
- *  - `long` verbose formatting [false]
- *
- * @param {String|Number} val
- * @param {Object} [options]
- * @throws {Error} throw an error if val is not a non-empty string or a number
- * @return {String|Number}
- * @api public
- */
-
-module.exports = function(val, options) {
-  options = options || {};
-  var type = typeof val;
-  if (type === 'string' && val.length > 0) {
-    return parse(val);
-  } else if (type === 'number' && isFinite(val)) {
-    return options.long ? fmtLong(val) : fmtShort(val);
-  }
-  throw new Error(
-    'val is not a non-empty string or a valid number. val=' +
-      JSON.stringify(val)
-  );
-};
-
-/**
- * Parse the given `str` and return milliseconds.
- *
- * @param {String} str
- * @return {Number}
- * @api private
- */
-
-function parse(str) {
-  str = String(str);
-  if (str.length > 100) {
-    return;
-  }
-  var match = /^(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
-    str
-  );
-  if (!match) {
-    return;
-  }
-  var n = parseFloat(match[1]);
-  var type = (match[2] || 'ms').toLowerCase();
-  switch (type) {
-    case 'years':
-    case 'year':
-    case 'yrs':
-    case 'yr':
-    case 'y':
-      return n * y;
-    case 'weeks':
-    case 'week':
-    case 'w':
-      return n * w;
-    case 'days':
-    case 'day':
-    case 'd':
-      return n * d;
-    case 'hours':
-    case 'hour':
-    case 'hrs':
-    case 'hr':
-    case 'h':
-      return n * h;
-    case 'minutes':
-    case 'minute':
-    case 'mins':
-    case 'min':
-    case 'm':
-      return n * m;
-    case 'seconds':
-    case 'second':
-    case 'secs':
-    case 'sec':
-    case 's':
-      return n * s;
-    case 'milliseconds':
-    case 'millisecond':
-    case 'msecs':
-    case 'msec':
-    case 'ms':
-      return n;
-    default:
-      return undefined;
-  }
-}
-
-/**
- * Short format for `ms`.
- *
- * @param {Number} ms
- * @return {String}
- * @api private
- */
-
-function fmtShort(ms) {
-  var msAbs = Math.abs(ms);
-  if (msAbs >= d) {
-    return Math.round(ms / d) + 'd';
-  }
-  if (msAbs >= h) {
-    return Math.round(ms / h) + 'h';
-  }
-  if (msAbs >= m) {
-    return Math.round(ms / m) + 'm';
-  }
-  if (msAbs >= s) {
-    return Math.round(ms / s) + 's';
-  }
-  return ms + 'ms';
-}
-
-/**
- * Long format for `ms`.
- *
- * @param {Number} ms
- * @return {String}
- * @api private
- */
-
-function fmtLong(ms) {
-  var msAbs = Math.abs(ms);
-  if (msAbs >= d) {
-    return plural(ms, msAbs, d, 'day');
-  }
-  if (msAbs >= h) {
-    return plural(ms, msAbs, h, 'hour');
-  }
-  if (msAbs >= m) {
-    return plural(ms, msAbs, m, 'minute');
-  }
-  if (msAbs >= s) {
-    return plural(ms, msAbs, s, 'second');
-  }
-  return ms + ' ms';
-}
-
-/**
- * Pluralization helper.
- */
-
-function plural(ms, msAbs, n, name) {
-  var isPlural = msAbs >= n * 1.5;
-  return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
-}
-
 },{}],28:[function(require,module,exports){
 /**
  * Compiles a querystring
@@ -16459,7 +16459,7 @@ var manager_2 = require("./manager");
 Object.defineProperty(exports, "Manager", { enumerable: true, get: function () { return manager_2.Manager; } });
 exports.default = lookup;
 
-},{"./manager":32,"./socket":34,"./url":36,"debug":37,"socket.io-parser":40}],32:[function(require,module,exports){
+},{"./manager":32,"./socket":34,"./url":36,"debug":37,"socket.io-parser":41}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Manager = void 0;
@@ -16836,7 +16836,7 @@ class Manager extends typed_events_1.StrictEventEmitter {
 }
 exports.Manager = Manager;
 
-},{"./on":33,"./socket":34,"./typed-events":35,"backo2":1,"debug":37,"engine.io-client":7,"socket.io-parser":40}],33:[function(require,module,exports){
+},{"./on":33,"./socket":34,"./typed-events":35,"backo2":1,"debug":37,"engine.io-client":7,"socket.io-parser":41}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.on = void 0;
@@ -17310,7 +17310,7 @@ class Socket extends typed_events_1.StrictEventEmitter {
 }
 exports.Socket = Socket;
 
-},{"./on":33,"./typed-events":35,"debug":37,"socket.io-parser":40}],35:[function(require,module,exports){
+},{"./on":33,"./typed-events":35,"debug":37,"socket.io-parser":41}],35:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StrictEventEmitter = void 0;
@@ -17456,7 +17456,9 @@ exports.url = url;
 arguments[4][18][0].apply(exports,arguments)
 },{"./common":38,"_process":30,"dup":18}],38:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
-},{"dup":19,"ms":27}],39:[function(require,module,exports){
+},{"dup":19,"ms":39}],39:[function(require,module,exports){
+arguments[4][20][0].apply(exports,arguments)
+},{"dup":20}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reconstructPacket = exports.deconstructPacket = void 0;
@@ -17538,7 +17540,7 @@ function _reconstructPacket(data, buffers) {
     return data;
 }
 
-},{"./is-binary":41}],40:[function(require,module,exports){
+},{"./is-binary":42}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Decoder = exports.Encoder = exports.PacketType = exports.protocol = void 0;
@@ -17820,7 +17822,7 @@ class BinaryReconstructor {
     }
 }
 
-},{"./binary":39,"./is-binary":41,"component-emitter":5,"debug":42}],41:[function(require,module,exports){
+},{"./binary":40,"./is-binary":42,"component-emitter":5,"debug":43}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hasBinary = exports.isBinary = void 0;
@@ -17877,11 +17879,13 @@ function hasBinary(obj, toJSON) {
 }
 exports.hasBinary = hasBinary;
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 arguments[4][18][0].apply(exports,arguments)
-},{"./common":43,"_process":30,"dup":18}],43:[function(require,module,exports){
+},{"./common":44,"_process":30,"dup":18}],44:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
-},{"dup":19,"ms":27}],44:[function(require,module,exports){
+},{"dup":19,"ms":45}],45:[function(require,module,exports){
+arguments[4][20][0].apply(exports,arguments)
+},{"dup":20}],46:[function(require,module,exports){
 'use strict';
 
 var alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'.split('')
@@ -17951,7 +17955,7 @@ yeast.encode = encode;
 yeast.decode = decode;
 module.exports = yeast;
 
-},{}],45:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var $ = require("jquery");
@@ -17969,8 +17973,16 @@ var bootstrapClientSocket = function () {
         }
     }).emit('subscribe', 'NUMBER_ONLINE_CLIENTS');
 };
+var formOnSubmit = function () {
+    $('form').on('submit', function (e) {
+        $('.disable-on-submit').attr('disabled', 'disabled');
+    });
+};
+var loginUsingAjax = function () {
+};
 $(document).ready(function () {
     bootstrapClientSocket();
+    formOnSubmit();
 });
 
-},{"jquery":26,"socket.io-client":31}]},{},[45]);
+},{"jquery":27,"socket.io-client":31}]},{},[47]);
