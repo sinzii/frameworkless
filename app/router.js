@@ -3,18 +3,18 @@ const Route = require('./route');
 const router = {};
 router.routes = [];
 
-function newRoute(method, path, handler) {
-    router.routes.push(new Route(method, path, handler));
+function newRoute(method, path, ...handlers) {
+    router.routes.push(new Route(method, path, ...handlers));
 }
 
-router.request = (method, path, handler) => {
-    newRoute(method, path, handler);
+router.request = (method, path, ...handlers) => {
+    newRoute(method, path, ...handlers);
 };
 
 const methods = ['get', 'post', 'put', 'delete'];
 methods.forEach((method) => {
-   router[method] = (path, handler) => {
-       newRoute(method, path, handler);
+   router[method] = (path, ...handlers) => {
+       newRoute(method, path, ...handlers);
    }
 });
 

@@ -9,7 +9,7 @@ const session = require('./session');
 
 const staticDirs = ['public'];
 
-const requestHandler = async function (req, res) {
+const handleRequest = async function (req, res) {
     const {method, url} = req;
     httpLogger.debug(`${method} - ${url}`);
 
@@ -27,7 +27,7 @@ const requestHandler = async function (req, res) {
     // detect route and serve
     const route = router.getMatchedRoute(req);
     if (route) {
-        await route.handler(req, res);
+        await route.handleRequest(req, res);
     } else {
         await errorUtils.send404Error(res, "Page's not found!");
     }
@@ -35,7 +35,7 @@ const requestHandler = async function (req, res) {
 
 const app = async (req, res) => {
     try {
-        await requestHandler(req, res);
+        await handleRequest(req, res);
     } catch (e) {
         logger.error(e);
 

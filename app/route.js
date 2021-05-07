@@ -1,9 +1,9 @@
 const { match } = require('path-to-regexp');
 
-function Route(method, path, handler) {
+function Route(method, path, ...handlers) {
     this.method = method;
     this.path = path;
-    this.handler = handler;
+    this.handlers = handlers;
 }
 
 const failedMatchResult = [false, null];
@@ -21,6 +21,16 @@ Route.prototype.matched =  function (method, path) {
     }
 
     return [true, matchResult.params];
+}
+
+Route.prototype.handleRequest = async function (req, res) {
+    for (const handler of this.handlers) {
+        if (typeof handler !== 'function') {
+            continue;
+        }
+
+        await handler(req, res);
+    }
 }
 
 module.exports = Route;
