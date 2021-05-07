@@ -2,17 +2,24 @@
     <div class="page-index">
         <div class="row">
             <div class="col-8 text-center mt-3">
-                <h2>A simple <span class="p-color">frameworkless</span> application</h2>
+                <h3 class="mb-3">A simple <span class="p-color">frameworkless</span> application</h3>
                 <p>Made from scratch without any backend framework</p>
                 <p>Start small, step by step, we can make it big!</p>
                 <a href="/showcases" class="btn btn-primary mt-3">See what we can do</a>
             </div>
             <div class="col-4 mt-3">
                 {{#if _session.currentUser}}
-                    <h3><small>Welcome</small> {{_session.currentUser.name}}</h3>
-                    <a href="/logout" class="text-decoration-underline text-secondary">Logout</a>
+                    {{#if (equals _query.view 'update-profile')}}
+                        {{>user/update-profile}}
+                    {{else if (equals _query.view 'change-password')}}
+                        {{>user/change-password}}
+                    {{else if (equals _query.view 'suspend-account')}}
+                        {{>user/suspend-account}}
+                    {{else}}
+                        {{>user/welcome}}
+                    {{/if}}
                 {{else}}
-                    {{>form_login}}
+                    {{>user/form_login}}
                 {{/if}}
             </div>
         </div>
