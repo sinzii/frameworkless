@@ -65,6 +65,10 @@ const registerHelpers = () => {
     Handlebars.registerHelper('equals', (currentPath, targetPath, options) => {
         return currentPath === targetPath;
     });
+
+    Handlebars.registerHelper('or', (value, _default, options) => {
+        return value || _default;
+    });
 }
 
 /**

@@ -22,7 +22,7 @@ class UserService extends BaseService {
             });
         }
 
-        const existedUser = await this.modelDao.findByEmail(data.email);
+        const existedUser = await this._isEmailReadyToUse(data.email);
         if (existedUser) {
             throw new InvalidSubmissionDataError(undefined, {
                 email: 'This is email has already been registered for another account'
@@ -82,6 +82,55 @@ class UserService extends BaseService {
 
     async findByEmail(email) {
         return await this.modelDao.findByEmail(email);
+    }
+
+    /**
+     * Check if an email is ready to use (create or update an user)
+     *
+     * @param email
+     * @param updatedUserId if it's to update a user profile
+     * @return {Promise<boolean>}
+     * @private
+     */
+    async _isEmailReadyToUse(email, updatedUserId) {
+        const existedUsers = await this.find({email});
+        const numberOfExistedUserUsingTheEmail = existedUsers.length;
+
+        const performUpdateProfile = !!updatedUserId;
+
+        if (!performUpdateProfile) { // for creating new user
+            return numberOfExistedUserUsingTheEmail === 0;
+        }
+
+        if (numberOfExistedUserUsingTheEmail === 0) {
+            return true;
+        } else if (numberOfExistedUserUsingTheEmail === 1) {
+            const updateTheExistedUserWithTheSameEmail = existedUsers[0].id === updatedUserId;
+
+            return updateTheExistedUserWithTheSameEmail;
+        } else if (numberOfExistedUserUsingTheEmail > 1) {
+            return false;
+        }
+    }
+
+    /**
+     * Update user profile
+     *
+     * @param data submitted data which follow UpdateUserProfileSchema
+     * @param userId
+     * @return Updated User Id
+     */
+    async updateProfile(data, userId) {
+        data = await validator.validate('UpdateUserProfileSchema', data);
+
+        const canUpdateEmail = await this._isEmailReadyToUse(data.email, data.id);
+        if (!canUpdateEmail) {
+            throw new InvalidSubmissionDataError(undefined, {
+                email: 'This is email has already been registered for another account'
+            })
+        }
+
+        return await this.update(data, userId);
     }
 }
 

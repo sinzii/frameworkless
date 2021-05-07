@@ -31,7 +31,6 @@ class BaseService extends BaseModel {
         doc.updatedBy = updaterId;
         doc.updatedAt = new Date();
 
-        console.log(doc);
         const validationSchemaName = `${this.currentModelCapitalized}Schema`;
         doc = await validate(validationSchemaName, doc);
 
@@ -46,8 +45,8 @@ class BaseService extends BaseModel {
         return this.create(doc, userId);
     }
 
-    async find() {
-        return this.modelDao.find();
+    async find(data, options) {
+        return this.modelDao.find(data, options);
     }
 }
 

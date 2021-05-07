@@ -18,8 +18,11 @@ const LoginSchema = UserSchema.pick(['email']).shape({
     password: yup.string().required().max(20),
 });
 
+const UpdateUserProfileSchema = UserSchema.pick(['id', 'email', 'name']);
+
 module.exports = {
     UserSchema,
     RegisterUserSchema,
-    LoginSchema
+    LoginSchema,
+    UpdateUserProfileSchema
 }

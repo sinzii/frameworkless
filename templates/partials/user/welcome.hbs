@@ -1,5 +1,7 @@
 <h3 class="mb-3"><small>Hello</small> {{_session.currentUser.name}}</h3>
-
+{{#if message}}
+    <div class="alert alert-{{#if messageStatus}}{{messageStatus}}{{else}}secondary{{/if}}" role="alert">{{message}}</div>
+{{/if}}
 <div class="list-group">
     <a href="/?view=update-profile" class="list-group-item list-group-item-action">Update profile</a>
     <a href="/?view=change-password" class="list-group-item list-group-item-action">Change password</a>

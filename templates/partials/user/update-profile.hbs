@@ -1,2 +1,28 @@
 <h3 class="mb-3">Update profile</h3>
-<a href="/" class="btn btn-primary">Back</a>
+<form action="/update-profile" method="POST">
+    {{#if message}}
+        <div class="alert alert-{{#if messageStatus}}{{messageStatus}}{{else}}secondary{{/if}}" role="alert">{{message}}</div>
+    {{/if}}
+
+    <div class="mb-3">
+        <label class="form-label" for="email">Email address</label>
+        <input type="email" required class="form-control {{#if errors.email}}is-invalid{{/if}}" id="email"
+               name="email" placeholder="name@example.com" value="{{or formInput.email _session.currentUser.email}}">
+        {{#if errors.email}}
+            <div class="invalid-feedback">{{errors.email}}</div>
+        {{/if}}
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="name">Name</label>
+        <input type="text" class="form-control {{#if errors.name}}is-invalid{{/if}}" id="name"
+               name="name" placeholder="Name" value="{{or formInput.name _session.currentUser.name}}">
+        {{#if errors.name}}
+            <div class="invalid-feedback">{{errors.name}}</div>
+        {{/if}}
+    </div>
+    <div class="form-footer d-flex justify-content-between">
+        <button type="submit" class="btn btn-primary disable-on-submit">Save</button>
+        <a href="/" class="btn btn-outline-secondary disable-on-submit">Back</a>
+    </div>
+</form>
+
