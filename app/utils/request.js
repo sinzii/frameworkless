@@ -10,8 +10,9 @@ const queryStringToMap = (queryString) => {
     const qs = queryString.split('&');
     for (const each of qs) {
         const [name, value] = each.split('=');
+
         if (name) {
-            query[name] = decodeURIComponent(value.replaceAll('+', ' '));
+            query[name] = value ? decodeURIComponent(value.replaceAll('+', ' ')) : '';
         }
     }
 
