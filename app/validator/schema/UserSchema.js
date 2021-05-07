@@ -20,9 +20,16 @@ const LoginSchema = UserSchema.pick(['email']).shape({
 
 const UpdateUserProfileSchema = UserSchema.pick(['id', 'email', 'name']);
 
+const ChangePasswordSchema = UserSchema.pick(['id']).shape({
+    password: yup.string().max(20).required(),
+    newPassword: yup.string().min(6).max(20).required(),
+    confirmPassword: yup.string().max(20).required(),
+});
+
 module.exports = {
     UserSchema,
     RegisterUserSchema,
     LoginSchema,
-    UpdateUserProfileSchema
+    UpdateUserProfileSchema,
+    ChangePasswordSchema
 }

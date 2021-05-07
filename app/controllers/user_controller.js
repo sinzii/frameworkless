@@ -39,3 +39,42 @@ const doUpdateProfile = async (req, res) => {
 }
 
 router.post('/update-profile', doUpdateProfile);
+
+/**
+ * Change password for current user
+ *
+ * @param req
+ * @param res
+ */
+const doChangePassword = async (req, res) => {
+    const currentUserId = req.session.currentUser.id;
+    req.body.id = currentUserId;
+
+    try {
+        await UserService.changePassword(req.body, currentUserId);
+
+        // require user to login again after changing password
+        delete req.session.currentUser;
+
+        req.putFlashAttrs({
+            message: 'New password has been set successfully, please login again',
+            messageStatus: 'success'
+        });
+
+        res.sendRedirect('/');
+    } catch (e) {
+        if (e instanceof InvalidSubmissionDataError) {
+            req.putFlashAttrs({
+                message: e.message,
+                messageStatus: 'danger',
+                errors: e.errors
+            });
+
+            res.sendRedirect('/?view=change-password');
+        } else {
+            throw e;
+        }
+    }
+}
+
+router.post('/change-password', doChangePassword);

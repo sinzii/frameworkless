@@ -130,7 +130,63 @@ class UserService extends BaseService {
             })
         }
 
-        return await this.update(data, userId);
+        return this.update(data, userId);
+    }
+
+    /**
+     * Verify if a rawPassword is correct for an user
+     *
+     * @param user
+     * @param rawPassword
+     * @return {Promise<boolean>}
+     */
+    async verifyPassword(user, rawPassword) {
+        const passwordHash = await this._hash(rawPassword, user.salt);
+        return passwordHash === user.passwordHash;
+    }
+
+    /**
+     * Change password for a user
+     *
+     * @param data submitted data following ChangePasswordSchema
+     * @param userId
+     * @return Updated User Id
+     */
+    async changePassword(data, userId) {
+        data = await validator.validate('ChangePasswordSchema', data);
+
+        // compare newPassword & confirmPassword
+        if (data.newPassword !== data.confirmPassword) {
+            throw new InvalidSubmissionDataError(undefined, {
+                confirmPassword: 'Confirm password must match new password'
+            });
+        }
+
+        const targetUser = await this.findById(data.id);
+        if (!targetUser) {
+            throw new InvalidSubmissionDataError('User is not found');
+        }
+
+        // check if password is correct
+        if (!await this.verifyPassword(targetUser, data.password)) {
+            throw new InvalidSubmissionDataError(undefined, {
+                password: 'Password is not correct'
+            });
+        }
+
+        // check if new password is different from old password
+        const newPasswordHash = await this._hash(data.newPassword, targetUser.salt);
+        if (newPasswordHash === targetUser.passwordHash) {
+            throw new InvalidSubmissionDataError(undefined, {
+                newPassword: 'You should use a new password'
+            });
+        }
+
+        // change the password
+        targetUser.passwordHash = newPasswordHash;
+
+        // update new password
+        return this.update(targetUser, userId);
     }
 }
 
