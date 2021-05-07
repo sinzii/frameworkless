@@ -43,7 +43,6 @@ const parseRequestBody = async (req) => {
             req.body = JSON.parse(rawBody);
             break;
         case 'application/x-www-form-urlencoded': // Form Post
-            console.log(rawBody);
             req.body = queryStringToMap(rawBody);
             break;
         case 'multipart/form-data': // File upload
