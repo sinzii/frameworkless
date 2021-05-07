@@ -21,7 +21,7 @@ function readTemplatesSync(folder, callback) {
 
             callback(path.join(folder, file), content, filePath);
         } else if (stat.isDirectory()) {
-            readTemplatesSync(filePath, callback);
+            readTemplatesSync(path.join(folder, file), callback);
         }
     }
 }
@@ -107,7 +107,12 @@ const getTemplate = function (name) {
 const render = async function (req, res, name, data) {
     const page = await getTemplate(name);
 
-    const templateData = {_req: req, _session: req.session};
+    const templateData = {
+        _req: req,
+        _query: req.query,
+        _body: req.body,
+        _session: req.session
+    };
 
     Object.assign(templateData, req.attrs());
 
