@@ -1,4 +1,4 @@
-<h3 class="mb-4">Login</h3>
+<h3 class="mb-3">Login</h3>
 <form action="/login" method="POST">
     {{#if message}}
         <div class="alert alert-danger" role="alert">{{message}}</div>
@@ -20,11 +20,9 @@
             <div class="invalid-feedback">{{errors.password}}</div>
         {{/if}}
     </div>
-    <div class="form-footer">
-        <div class="float-start">
-            <p class="mb-2"><button type="submit" class="btn btn-primary disable-on-submit">Login</button></p>
-        </div>
-        <div class="float-end">
+    <div class="form-footer d-flex justify-content-between">
+        <p class="mb-2"><button type="submit" class="btn btn-primary disable-on-submit">Login</button></p>
+        <div>
             <p class="mb-1 text-end"><a href="/forget-password" class="text-decoration-underline text-secondary">Forget password?</a></p>
             <p class="text-secondary text-end">Not a member? <a href="/signup" class="text-decoration-underline text-primary">Signup</a></p>
         </div>
