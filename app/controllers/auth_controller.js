@@ -14,9 +14,12 @@ const doLogin = async (req, res) => {
         req.session.currentUser = currentUser;
     } catch (e) {
         if (e instanceof InvalidSubmissionDataError) {
-            req.putFlashAttr('message', e.message);
-            req.putFlashAttr('errors', e.errors);
-            req.putFlashAttr('formInput', req.body);
+            req.putFlashAttrs({
+                message: e.message,
+                messageStatus: 'danger',
+                errors: e.errors,
+                formInput: req.body
+            });
         } else {
             throw e;
         }

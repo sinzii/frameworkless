@@ -1,7 +1,7 @@
 <h3 class="mb-3">Login</h3>
 <form action="/login" method="POST">
     {{#if message}}
-        <div class="alert alert-danger" role="alert">{{message}}</div>
+        <div class="alert alert-{{#if messageStatus}}{{messageStatus}}{{else}}secondary{{/if}}" role="alert">{{message}}</div>
     {{/if}}
 
     <div class="mb-3">
