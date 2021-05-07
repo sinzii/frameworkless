@@ -1,5 +1,6 @@
 const router = require('../router');
 const UserService = require('../services/UserService');
+const {authenticated} = require('../middlewares/permissions');
 
 /**
  * Update user profile
@@ -38,7 +39,7 @@ const doUpdateProfile = async (req, res) => {
     }
 }
 
-router.post('/update-profile', doUpdateProfile);
+router.post('/update-profile', authenticated, doUpdateProfile);
 
 /**
  * Change password for current user
@@ -77,7 +78,7 @@ const doChangePassword = async (req, res) => {
     }
 }
 
-router.post('/change-password', doChangePassword);
+router.post('/change-password', authenticated, doChangePassword);
 
 /**
  * Suspend the account
@@ -116,4 +117,4 @@ const doSuspendAccount = async (req, res) => {
     }
 }
 
-router.post('/suspend-account', doSuspendAccount);
+router.post('/suspend-account', authenticated, doSuspendAccount);

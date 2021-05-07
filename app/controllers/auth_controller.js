@@ -1,5 +1,6 @@
 const router = require('../router');
 const AuthService = require('../services/AuthService');
+const {authenticated} = require('../middlewares/permissions');
 
 /**
  * Handle request to login to the application
@@ -42,4 +43,4 @@ const doLogout = async (req, res) => {
     res.sendRedirect('/');
 }
 
-router.get('/logout', doLogout);
+router.get('/logout', authenticated, doLogout);
