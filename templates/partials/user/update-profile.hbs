@@ -7,7 +7,7 @@
     <div class="mb-3">
         <label class="form-label" for="email">Email address</label>
         <input type="email" required class="form-control {{#if errors.email}}is-invalid{{/if}}" id="email"
-               name="email" placeholder="name@example.com" value="{{or formInput.email _session.currentUser.email}}">
+               name="email" value="{{or formInput.email _session.currentUser.email}}">
         {{#if errors.email}}
             <div class="invalid-feedback">{{errors.email}}</div>
         {{/if}}
@@ -15,7 +15,7 @@
     <div class="mb-3">
         <label class="form-label" for="name">Name</label>
         <input type="text" class="form-control {{#if errors.name}}is-invalid{{/if}}" id="name"
-               name="name" placeholder="Name" value="{{or formInput.name _session.currentUser.name}}">
+               name="name" value="{{or formInput.name _session.currentUser.name}}">
         {{#if errors.name}}
             <div class="invalid-feedback">{{errors.name}}</div>
         {{/if}}
