@@ -188,6 +188,30 @@ class UserService extends BaseService {
         // update new password
         return this.update(targetUser, userId);
     }
+
+    async suspendAccount(data, userId) {
+        data = await validator.validate('SuspendAccountSchema', data);
+
+        const targetUser = await this.findById(data.id);
+        if (!targetUser) {
+            throw new InvalidSubmissionDataError('User is not found');
+        }
+
+        const isCorrectPassword = await this.verifyPassword(targetUser, data.password);
+        if (!isCorrectPassword) {
+            throw new InvalidSubmissionDataError(undefined, {
+                password: 'Password is not correct'
+            });
+        }
+
+        if (targetUser.suspended) {
+            return targetUser.id;
+        }
+
+        targetUser.suspended = true;
+
+        return this.update(targetUser, userId);
+    }
 }
 
 module.exports = new UserService();

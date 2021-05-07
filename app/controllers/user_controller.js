@@ -78,3 +78,42 @@ const doChangePassword = async (req, res) => {
 }
 
 router.post('/change-password', doChangePassword);
+
+/**
+ * Suspend the account
+ *
+ * @param req
+ * @param res
+ */
+const doSuspendAccount = async (req, res) => {
+    const currentUserId = req.session.currentUser.id;
+    req.body.id = currentUserId;
+
+    try {
+        await UserService.suspendAccount(req.body, currentUserId);
+
+        // logout the user
+        delete req.session.currentUser;
+
+        req.putFlashAttrs({
+            message: 'Your account has been suspended successfully',
+            messageStatus: 'success'
+        });
+
+        res.sendRedirect('/');
+    } catch (e) {
+        if (e instanceof InvalidSubmissionDataError) {
+            req.putFlashAttrs({
+                message: e.message,
+                messageStatus: 'danger',
+                errors: e.errors
+            });
+
+            res.sendRedirect('/?view=suspend-account');
+        } else {
+            throw e;
+        }
+    }
+}
+
+router.post('/suspend-account', doSuspendAccount);

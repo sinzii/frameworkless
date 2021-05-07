@@ -23,6 +23,10 @@ class AuthService extends BaseService {
             throw new InvalidSubmissionDataError('Email or password is not correct');
         }
 
+        if (targetUser.suspended) {
+            throw new InvalidSubmissionDataError('The account has been suspended');
+        }
+
         return {
             currentUser: targetUser
         };

@@ -1,2 +1,23 @@
-<h3 class="mb-3">Suspend account</h3>
-<a href="/" class="btn btn-primary">Back</a>
+<h3 class="mb-3 text-danger">Suspend account</h3>
+<form action="/suspend-account" method="POST">
+    {{#if message}}
+        <div class="alert alert-{{#if messageStatus}}{{messageStatus}}{{else}}secondary{{/if}}" role="alert">{{message}}</div>
+    {{/if}}
+
+    <p>This action <strong>cannot</strong> be revert, please enter you password to proceed.</p>
+    <p>You will be logout from the application and can <strong>no longer</strong> login again using this account after it is suspended.</p>
+
+    <div class="mb-3">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" class="form-control {{#if errors.password}}is-invalid{{/if}}" id="password"
+               name="password" value="">
+        {{#if errors.password}}
+            <div class="invalid-feedback">{{errors.password}}</div>
+        {{/if}}
+    </div>
+
+    <div class="form-footer d-flex justify-content-between">
+        <button type="submit" class="btn btn-danger disable-on-submit">Submit</button>
+        <a href="/" class="btn btn-outline-secondary disable-on-submit">Back</a>
+    </div>
+</form>
