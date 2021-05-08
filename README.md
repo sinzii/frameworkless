@@ -2,11 +2,11 @@
 # Frameworkless
 > A simple frameworkless NodeJS application
 
-Inspired from a [tutorial](mdn-tut) about making a NodeJs application without framework on MDN.
+Inspired by a [tutorial](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Node_server_without_framework) about making a NodeJs application without framework on MDN.
 
 ![What I cannot create, I do not understand](/docs/images/feynman.png)
  
-[Image source](build-your-own-x)
+[Image source](https://github.com/danistefanovic/build-your-own-x)
 
 ## Features
 - Updating...
@@ -64,5 +64,3 @@ We embrace all the contributions to our heart, so don't hesitate to shoot a pull
 [MIT](LICENSE)
 
 <!-- URLs -->
-[mdn-tut]: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Node_server_without_framework
-[build-your-own-x]: https://github.com/danistefanovic/build-your-own-x
