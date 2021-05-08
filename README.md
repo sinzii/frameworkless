@@ -23,7 +23,7 @@ Inspired by a [tutorial](https://developer.mozilla.org/en-US/docs/Learn/Server-s
 - Run `npm run docker-dev` the start the application
 - Run `npm run docker-gulp-serve` if you edit any scss & typescript for frontend development
 
-### No prefer the local environment
+### No! I prefer the local environment
 - Install NodeJS & MongoDB on your computer
 - Run `npm install`
 - Add the `.env` file for [configuration](#edit-the-env-file)
@@ -31,7 +31,7 @@ Inspired by a [tutorial](https://developer.mozilla.org/en-US/docs/Learn/Server-s
 - Run `npx gulp serve` if you edit any scss & typescript for frontend development
 
 ## Edit the .env file
-We store all configuration in an .env file at the root folder of the application. 
+We store all configuration in an `.env` file at the root folder of the application. 
 
 You also can place the file anywhere you want but make sure to set env variable `FWL_DOTENV_PATH` to the file path. 
 
