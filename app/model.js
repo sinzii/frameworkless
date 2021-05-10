@@ -1,8 +1,9 @@
 const StringUtils = require('./utils/string');
 
 const models = {
-    USER: 'user',
-    NOTE: 'note'
+    USER: 'User',
+    NOTE: 'Note',
+    TOKEN_BASED_DECISION: 'TokenBasedDecision',
 }
 
 class BaseModel {
