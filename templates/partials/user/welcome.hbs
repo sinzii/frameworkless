@@ -3,6 +3,11 @@
     <div class="alert alert-{{#if messageStatus}}{{messageStatus}}{{else}}secondary{{/if}}" role="alert">{{message}}</div>
 {{/if}}
 <div class="list-group">
+    {{#unless _session.currentUser.verified}}
+        <a href="/verify-email" class="list-group-item list-group-item-action list-group-item-success">
+            Verify your email: <b>{{_session.currentUser.email}}</b>
+        </a>
+    {{/unless}}
     <a href="/?view=update-profile" class="list-group-item list-group-item-action">Update profile</a>
     <a href="/?view=change-password" class="list-group-item list-group-item-action">Change password</a>
     <br/>

@@ -73,6 +73,8 @@ class BaseDaoDieuLinh extends BaseModel { // don't get confused, that's my crush
             return id;
         }
 
+        await this.beforeUpdate(doc, changedData);
+
         await this.currentCollection.updateOne(
             { _id: this.objectId(id) },
             { $set: changedData },
@@ -80,6 +82,17 @@ class BaseDaoDieuLinh extends BaseModel { // don't get confused, that's my crush
         );
 
         return id;
+    }
+
+    /**
+     * A hook running before updating a record
+     *
+     * @param doc
+     * @param changedData
+     * @return {Promise<void>}
+     */
+    async beforeUpdate(doc, changedData) {
+        // do nothing here!
     }
 
     async upsert(doc) {
@@ -125,7 +138,7 @@ class BaseDaoDieuLinh extends BaseModel { // don't get confused, that's my crush
         const changedData = {};
 
         Object.keys(newData).forEach((field) => {
-            if (!currentData[field] || currentData[field] !== newData[field]) {
+            if (currentData[field] === undefined || currentData[field] !== newData[field]) {
                 changedData[field] = newData[field];
             }
         });

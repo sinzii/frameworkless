@@ -1,0 +1,11 @@
+<p>Hello, {{_session.currentUser.name}}</p>
+<br>
+<p>Please <a href="{{_baseUrl}}/trigger-decision?token={{token}}" target="_blank" style="font-weight: 600">click here</a> to verify your email!</p>
+{{#if maxAgeInMinutes}}
+    <p>The link will be expired in <strong>{{maxAgeInMinutes}} minutes</strong></p>
+{{/if}}
+<br>
+<p>If you are not aware of this email or have nothing to do with this, please just ignore it.</p>
+<br>
+<p>Best regards,</p>
+<p>The FWL Development Team</p>

@@ -1,6 +1,11 @@
 const router = require('../router');
 const UserService = require('../services/UserService');
+const EmailService = require('../services/EmailService');
 const {authenticated} = require('../middlewares/permissions');
+const logger = require('log4js').getLogger('app/controller/user_controller');
+const viewEngine = require('../views_engine');
+const TokenBasedDecisionService = require('../services/TokenBasedDecisionService');
+const TokenType = require('../utils/TokenType');
 
 /**
  * Update user profile
@@ -118,3 +123,60 @@ const doSuspendAccount = async (req, res) => {
 }
 
 router.post('/suspend-account', authenticated, doSuspendAccount);
+
+/**
+ * Send a verify email to the mailbox of current user
+ *
+ * @param req
+ * @param res
+ */
+const verifyEmail = async (req, res) => {
+    const {currentUser, lastEmailSentAt} = req.session;
+
+    const canSend = () => {
+        if (!lastEmailSentAt || typeof lastEmailSentAt !== 'number') {
+            return true;
+        }
+
+        const ONE_MIN_IN_MILLISECONDS = 60 * 1000;
+        return new Date().getTime() - lastEmailSentAt > ONE_MIN_IN_MILLISECONDS;
+    };
+
+    if (!canSend()) {
+        req.putFlashAttrs({
+            message: 'Please wait at least 1 minutes to request sending verification email again',
+            messageStatus: 'danger'
+        });
+    } else {
+        const maxAgeInMinutes = 3;
+        const token = await TokenBasedDecisionService.issueToken(
+            TokenType.VERIFY_EMAIL,
+            currentUser.id,
+            maxAgeInMinutes
+        );
+
+        EmailService.send({
+            to: `${currentUser.name} <${currentUser.email}>`,
+            subject: 'Verify your email - Frameworkless',
+            html: await viewEngine.renderTemplate(req, 'emails/verification-email', {
+                token,
+                maxAgeInMinutes
+            })
+        }).then(rs => {
+            logger.info('Sending email successful', rs);
+        }, err => {
+            logger.error(`Fail to send email to ${currentUser.email}`, err);
+        });
+
+        req.session.lastEmailSentAt = new Date().getTime();
+
+        req.putFlashAttrs({
+            message: 'The verification email has been sent, please check your mailbox',
+            messageStatus: 'success'
+        });
+    }
+
+    res.sendRedirect('/');
+}
+
+router.get('/verify-email', authenticated, verifyEmail);

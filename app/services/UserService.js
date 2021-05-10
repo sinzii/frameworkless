@@ -200,6 +200,13 @@ class UserService extends BaseService {
 
         return this.update(targetUser, userId);
     }
+
+    async verifyEmail(userId) {
+        const targetUser = await this.findById(userId);
+        targetUser.verified = true;
+
+        return this.update(targetUser, userId);
+    }
 }
 
 module.exports = new UserService();
