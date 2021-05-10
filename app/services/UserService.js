@@ -1,6 +1,6 @@
 const BaseService = require('./BaseService');
+const TokenService = require('./TokenService');
 const validator = require('../validator');
-const crypto = require('crypto');
 
 class UserService extends BaseService {
     get currentModel() {
@@ -22,8 +22,7 @@ class UserService extends BaseService {
             });
         }
 
-        const existedUser = await this._isEmailReadyToUse(data.email);
-        if (existedUser) {
+        if (!await this._isEmailReadyToUse(data.email)) {
             throw new InvalidSubmissionDataError(undefined, {
                 email: 'This is email has already been registered for another account'
             })
@@ -39,27 +38,12 @@ class UserService extends BaseService {
         return await this.findById(newUserId);
     }
 
-    async _hash(rawPassword, salt) {
-        return new Promise((resolve, reject) => {
-            crypto.pbkdf2(
-                rawPassword, salt, 10000, 100, 'sha512',
-                function (err, derivedKey) {
-                    if (err) {
-                        reject(new BusinessError('There an error occurred while processing the password'));
-                    } else {
-                        resolve(derivedKey.toString('hex'));
-                    }
-                }
-            );
-        });
-    }
-
     async hashingPassword(rawPassword, salt) {
         if (!salt) {
-            salt = crypto.randomBytes(16).toString('hex');
+            salt = TokenService.generateSalt();
         }
 
-        const passwordHash = await this._hash(rawPassword, salt);
+        const passwordHash = await TokenService.hash(rawPassword, salt);
 
         return {
             passwordHash,
@@ -68,6 +52,10 @@ class UserService extends BaseService {
     }
 
     removeSensitiveInformation(docs) {
+        if (!docs) {
+            throw new ResourceNotFoundError(`${this.currentModelCapitalized} is not found`);
+        }
+
         if (!Array.isArray(docs)) {
             docs = [docs];
         }
@@ -141,7 +129,7 @@ class UserService extends BaseService {
      * @return {Promise<boolean>}
      */
     async verifyPassword(user, rawPassword) {
-        const passwordHash = await this._hash(rawPassword, user.salt);
+        const passwordHash = await TokenService.hash(rawPassword, user.salt);
         return passwordHash === user.passwordHash;
     }
 
@@ -175,7 +163,7 @@ class UserService extends BaseService {
         }
 
         // check if new password is different from old password
-        const newPasswordHash = await this._hash(data.newPassword, targetUser.salt);
+        const newPasswordHash = await TokenService.hash(data.newPassword, targetUser.salt);
         if (newPasswordHash === targetUser.passwordHash) {
             throw new InvalidSubmissionDataError(undefined, {
                 newPassword: 'You should use a new password'
