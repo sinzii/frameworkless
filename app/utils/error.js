@@ -3,12 +3,14 @@ const viewsEngine = require('../views_engine');
 const sendErrorCode = async (res, statusCode = 500, message) => {
     message = message || 'There was a problem occurred while processing the request.';
 
+    let errorPage;
     try {
-        const errorPage = await viewsEngine.getTemplate(`error_${statusCode}`);
-        res.send(errorPage({message, statusCode}), statusCode);
+        errorPage = await viewsEngine.getTemplate(`error_${statusCode}`);
     } catch (e) {
-        res.send(`${statusCode} - ${message}`, statusCode, 'text/plain');
+        errorPage = await viewsEngine.getTemplate(`error`);
     }
+
+    res.send(errorPage({message, statusCode}), statusCode);
 }
 
 
