@@ -13,8 +13,9 @@ const setupApplication = async () => {
     logger.debug('Load business services');
     require('../services');
 
-    logger.debug('Load data validator');
-    require('../validator');
+    logger.debug('Setup email SMTP transporter');
+    const EmailService = require('../services/EmailService');
+    await EmailService.setupTransporter();
 
     logger.debug('Load controllers');
     loader.loadControllers('./controllers');
