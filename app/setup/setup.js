@@ -10,6 +10,9 @@ const setupApplication = async () => {
     logger.debug('Load data access objects');
     require('../dao');
 
+    logger.debug('Load data validator');
+    require('../validator');
+
     logger.debug('Load business services');
     require('../services');
 
