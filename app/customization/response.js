@@ -51,14 +51,11 @@ http.ServerResponse.prototype.sendRedirect = function (url, statusCode = 302) {
 }
 
 /**
- * Check if current request is a rest api request which start with /api in the path
+ * Put attributes into request
  *
- * @returns boolean
+ * @param name
+ * @param obj
  */
-http.IncomingMessage.prototype.isRestApiRequest = function () {
-    return this.url.startsWith('/api');
-}
-
 http.IncomingMessage.prototype.putAttr = function (name, obj) {
     const attrs = this.attrs();
 
@@ -79,6 +76,13 @@ http.IncomingMessage.prototype.attrs = function () {
     return this._templateAttrs;
 }
 
+/**
+ * Flash attributes is attribute only live in the session until the next request comes in.
+ * It serves the purpose of display messages after performing an action.
+ *
+ * @param name
+ * @param obj
+ */
 http.IncomingMessage.prototype.putFlashAttr = function (name, obj) {
     const flashAttrs = this.flashAttrs();
 
@@ -99,6 +103,10 @@ http.IncomingMessage.prototype.flashAttrs = function () {
     return this.session._templateFlashAttrs;
 }
 
+/**
+ * Merge the flash attributes from the session into request
+ * And clear the flash attrs from the session after that.
+ */
 http.IncomingMessage.prototype.mergeFlashAttrs = function () {
     const flashAttrs = this.session._templateFlashAttrs;
     if (flashAttrs) {
