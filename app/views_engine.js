@@ -84,7 +84,7 @@ const setup = function () {
  * Get a specific template by name
  *
  * @param name
- * @returns {Promise<unknown>}
+ * @returns {Promise<Function>}
  */
 const getTemplate = function (name) {
     // TODO load compiled template for production
@@ -108,27 +108,41 @@ const getTemplate = function (name) {
     });
 };
 
-const render = async function (req, res, name, data) {
-    const page = await getTemplate(name);
+const renderTemplate = async (req, name, data = {}) => {
+    if (arguments.length === 2 && typeof req === 'string') {
+        name = req;
+        data = name;
+        req = false;
+    }
 
-    const templateData = {
-        _req: req,
-        _query: req.query,
-        _body: req.body,
-        _session: req.session
-    };
+    const templateData = {};
 
-    Object.assign(templateData, req.attrs());
+    if (req) {
+        Object.assign(templateData, {
+            _req: req,
+            _query: req.query,
+            _body: req.body,
+            _session: req.session,
+            _baseUrl: req.baseUrl()
+        });
+
+        Object.assign(templateData, req.attrs());
+    }
 
     if (data) {
         Object.assign(templateData, data);
     }
 
-    res.send(page(templateData));
+    return (await getTemplate(name))(templateData);
+}
+
+const render = async function (req, res, name, data) {
+    res.send(await renderTemplate(req, name, data));
 }
 
 module.exports = {
     setup,
     getTemplate,
-    render
+    render,
+    renderTemplate
 }
