@@ -13,8 +13,14 @@ class BaseService extends BaseModel {
         return modelDao;
     }
 
-    async findById(id) {
-        return this.modelDao.findById(id);
+    async findById(id, throwIfNotFound=true) {
+        const obj = await this.modelDao.findById(id);
+
+        if (!obj && throwIfNotFound) {
+            throw new ResourceNotFoundError(`${this.currentModelCapitalized} is not found`);
+        }
+
+        return obj;
     }
 
     async create(doc, creatorId) {
