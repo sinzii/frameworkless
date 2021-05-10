@@ -7,6 +7,18 @@ if (result.error) {
 }
 
 const config = result.parsed;
+Object.keys(config).forEach(name => {
+    const value = config[name];
+
+    if (!value) {
+        return;
+    }
+
+    // remove the comment part after #
+    if (value.includes('#')) {
+        config[name] = value.split('#')[0].trim();
+    }
+});
 
 config.ENV = config.NODE_ENV;
 
