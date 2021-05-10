@@ -69,7 +69,7 @@ class TokenService {
      * @param complete
      * @return {Promise<null|{payload, signature, header: (header|string|{isValid: *, message: string})}>}
      */
-    async decodeJwt(token, complete=false) {
+    decodeJwt(token, complete=false) {
         return jwt.decode(token, {complete});
     }
 
