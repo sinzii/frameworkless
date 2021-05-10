@@ -16,7 +16,7 @@ loader.loadModules(
 const getSchema = (name) => {
     const schema = schemas[name];
     if (!schema) {
-        throw new BusinessError('Schema is not existed');
+        throw new BusinessError(`Schema ${name} is not existed`);
     }
 
     return schema;

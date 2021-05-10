@@ -63,6 +63,17 @@ class TokenService {
     }
 
     /**
+     * Decode a jwt
+     *
+     * @param token
+     * @param complete
+     * @return {Promise<null|{payload, signature, header: (header|string|{isValid: *, message: string})}>}
+     */
+    async decodeJwt(token, complete=false) {
+        return jwt.decode(token, {complete});
+    }
+
+    /**
      * Generate a salt for hashing content
      * @param length
      * @return {string}
