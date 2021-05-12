@@ -66,8 +66,22 @@ const registerHelpers = () => {
         return currentPath === targetPath;
     });
 
-    Handlebars.registerHelper('or', (value, _default, options) => {
-        return value || _default;
+    Handlebars.registerHelper('or', function() {
+        const orValues = [...arguments].slice(0, arguments.length - 1);
+
+        let v;
+        for (v of orValues) {
+            if (v) {
+                return v;
+            }
+        }
+
+        return v;
+    });
+
+    Handlebars.registerHelper('and', function () {
+        const andValues = [...arguments].slice(0, arguments.length - 1);
+        return andValues.every(v => !!v);
     });
 }
 
