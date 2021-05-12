@@ -26,7 +26,7 @@ class EmailService {
         try {
             return await this.transporter.sendMail(message);
         } catch (e) {
-            logger.error('Fail to send email', e);
+            logger.error(`Fail to send email to ${message.to}`, e);
             throw new BusinessError(e.message);
         }
     }
@@ -87,6 +87,24 @@ class EmailService {
         }
 
         return null;
+    }
+
+    /**
+     * Check if we can send the email again
+     *
+     * @param lastEmailSentAt in milliseconds
+     * @param intervalInMinutes
+     * @return {boolean}
+     */
+    checkEmailSendingLimitation(lastEmailSentAt, intervalInMinutes=1) {
+        if (!lastEmailSentAt || typeof lastEmailSentAt !== 'number') {
+            return true;
+        }
+
+        const passed = new Date().getTime() - lastEmailSentAt > intervalInMinutes * 60 * 1000;
+        if (!passed) {
+            throw new BusinessError(`Please wait at least ${intervalInMinutes} minute(s) to request sending email again`);
+        }
     }
 }
 

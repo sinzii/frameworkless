@@ -68,6 +68,13 @@ const triggerTokenDecision = async (req, res) => {
 
             res.sendRedirect('/');
             break;
+        case TokenType.RESET_PASSWORD:
+            req.putFlashAttrs({
+                token
+            });
+
+            res.sendRedirect('/?view=reset-password');
+            break;
         default:
             throw new ResourceNotFoundError();
     }

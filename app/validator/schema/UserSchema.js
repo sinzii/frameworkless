@@ -34,11 +34,20 @@ const SuspendAccountSchema = UserSchema.pick(['id']).shape({
     password: passwordInputSchema
 });
 
+const ForgetPasswordSchema = UserSchema.pick(['email']);
+
+const ResetPasswordSchema = UserSchema.pick(['id']).shape({
+    newPassword: passwordStrictSchema,
+    confirmPassword: passwordInputSchema,
+});
+
 module.exports = {
     UserSchema,
     RegisterUserSchema,
     LoginSchema,
     UpdateUserProfileSchema,
     ChangePasswordSchema,
-    SuspendAccountSchema
+    SuspendAccountSchema,
+    ForgetPasswordSchema,
+    ResetPasswordSchema
 }

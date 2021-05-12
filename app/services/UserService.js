@@ -154,9 +154,6 @@ class UserService extends BaseService {
         }
 
         const targetUser = await this.findById(data.id);
-        if (!targetUser) {
-            throw new InvalidSubmissionDataError('User is not found');
-        }
 
         // check if password is correct
         if (!await this.verifyPassword(targetUser, data.password)) {
@@ -164,6 +161,40 @@ class UserService extends BaseService {
                 password: 'Password is not correct'
             });
         }
+
+        // check if new password is different from old password
+        const newPasswordHash = await TokenService.hash(data.newPassword, targetUser.salt);
+        if (newPasswordHash === targetUser.passwordHash) {
+            throw new InvalidSubmissionDataError(undefined, {
+                newPassword: 'You should use a new password'
+            });
+        }
+
+        // change the password
+        targetUser.passwordHash = newPasswordHash;
+
+        // update new password
+        return this.update(targetUser, userId);
+    }
+
+    /**
+     * Reset password for a user
+     *
+     * @param data submitted data follows ResetPasswordSchema
+     * @param userId who did this
+     * @return {Promise<*>}
+     */
+    async resetPassword(data, userId) {
+        data = await validator.validate('ResetPasswordSchema', data);
+
+        // compare newPassword & confirmPassword
+        if (data.newPassword !== data.confirmPassword) {
+            throw new InvalidSubmissionDataError(undefined, {
+                confirmPassword: 'Confirm password must match new password'
+            });
+        }
+
+        const targetUser = await this.findById(data.id);
 
         // check if new password is different from old password
         const newPasswordHash = await TokenService.hash(data.newPassword, targetUser.salt);

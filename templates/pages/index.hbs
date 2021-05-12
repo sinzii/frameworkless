@@ -8,7 +8,11 @@
                 <a href="/showcases" class="btn btn-primary mt-3">See what we can do</a>
             </div>
             <div class="col-4 mt-3">
-                {{#if _session.currentUser}}
+                {{#if (equals _query.view 'forget-password')}}
+                    {{>user/forget-password}}
+                {{else if (and (equals _query.view 'reset-password') token)}}
+                    {{>user/reset-password}}
+                {{else if _session.currentUser}}
                     {{#if (equals _query.view 'update-profile')}}
                         {{>user/update-profile}}
                     {{else if (equals _query.view 'change-password')}}
