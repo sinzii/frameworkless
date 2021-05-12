@@ -118,7 +118,10 @@ class UserService extends BaseService {
             })
         }
 
-        return this.update(data, userId);
+        const targetUser = await this.findById(data.id);
+        Object.assign(targetUser, data);
+
+        return this.update(targetUser, userId);
     }
 
     /**
